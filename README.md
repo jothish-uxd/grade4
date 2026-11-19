@@ -18,7 +18,7 @@ python3 -m http.server 8000
 # then visit http://localhost:8000
 ```
 
-To publish it, turn on GitHub Pages under **Settings → Pages**: deploy from the `main` branch, `/ (root)`.
+It publishes to GitHub Pages through `.github/workflows/pages.yml` on every push to `main`. Under **Settings → Pages**, **Source** must be set to **GitHub Actions**.
 
 ## Structure
 
