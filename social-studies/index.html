@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regions of Canada · Social Studies · Grade 4</title>
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+:root{
+  --ink:#1f2a37; --muted:#5b6675; --paper:#fffdf8; --card:#ffffff; --line:#e6e0d4;
+  --sea:#d7ebf7; --land:#f3efe6; --accent:#c8553d; --ok:#2e7d4f; --okbg:#e7f5ec; --no:#b3261e; --nobg:#fdecea;
+  --focus:#1d4ed8;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{margin:0;font-family:var(--body-font);color:var(--ink);line-height:1.5;font-size:18px}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+header.hero{display:grid;gap:10px;margin-bottom:22px}
+.kicker{font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--head-font);font-weight:700;font-size:clamp(32px,5vw,50px);line-height:1.1;margin:0}
+.sub{color:var(--muted);margin:0;max-width:62ch}
+.parent{background:#fff6e5;border:1px solid #f1dcb0;border-radius:14px;padding:14px 18px;font-size:16px}
+.parent strong{display:block;margin-bottom:2px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(6px);padding:10px 0;margin:8px 0 18px;border-bottom:1px solid var(--line)}
+.score{font-weight:700;margin-right:auto}
+.score span{color:var(--ok)}
+button{font:inherit;cursor:pointer}
+.btn{font-family:var(--head-font);border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:7px 16px;font-size:16px;font-weight:700}
+.btn:hover{background:#f4f1ea}
+.btn.primary{background:var(--ink);color:#fff}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+section.ref{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:28px}
+section.ref h2{margin:0 0 4px;font-size:28px;font-family:var(--head-font);font-weight:600}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px 18px;margin-top:14px;padding:0;list-style:none}
+.legend li{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.sw{flex:none;width:26px;height:26px;border-radius:7px;border:1.5px solid #6b6255;display:grid;place-items:center;font-weight:800;font-size:14px}
+.legend b{display:block;font-size:16px}
+svg.map{width:100%;height:auto;display:block;border-radius:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:22px;break-inside:avoid}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.qnum{font-family:var(--head-font);background:var(--ink);color:#fff;border-radius:999px;font-weight:800;font-size:14px;padding:3px 12px}
+.topic{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.qtext{font-family:var(--head-font);font-size:23px;font-weight:600;margin:4px 0 14px;line-height:1.3}
+.fig{margin:0 0 14px;background:#f7f4ee;border-radius:14px;overflow:hidden}
+.fig svg{width:100%;height:auto;display:block}
+.fig.scene{max-width:480px}
+.card > .fig, .agrid.one .fig{max-width:660px}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:0;padding:0;list-style:none}
+.choice{width:100%;text-align:left;border:2px solid #cfc7b8;background:#fff;border-radius:14px;padding:10px 14px;font-size:17px;display:flex;gap:10px;align-items:center;color:var(--ink)}
+.choice:hover:not([disabled]){border-color:var(--ink)}
+.choice .l{flex:none;width:28px;height:28px;border-radius:50%;background:#efe9dd;display:grid;place-items:center;font-weight:800;font-size:15px}
+.choice[disabled]{cursor:default}
+.choice.right{border-color:var(--ok);background:var(--okbg)}
+.choice.right .l{background:var(--ok);color:#fff}
+.choice.wrong{border-color:var(--no);background:var(--nobg)}
+.choice.wrong .l{background:var(--no);color:#fff}
+.reveal{margin-top:10px}
+.linkbtn{background:none;border:none;color:var(--muted);text-decoration:underline;padding:4px 0;font-size:15px}
+.answer{margin-top:16px;border-top:2px dashed var(--line);padding-top:16px}
+.answer[hidden]{display:none}
+.verdict{font-weight:800;font-size:18px;margin-bottom:4px}
+.verdict.ok{color:var(--ok)} .verdict.no{color:var(--no)}
+.ans{font-family:var(--head-font);font-size:21px;font-weight:600;margin:0 0 10px}
+.agrid{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:start}
+.agrid.one{grid-template-columns:1fr}
+.agrid .fig{margin:0}
+.explain p{margin:0 0 10px}
+.fun{background:#eef6ff;border-radius:12px;padding:10px 14px;font-size:16px}
+.fun b{color:#1d4ed8}
+.key{display:none}
+body.ws .reveal,body.ws .answer{display:none!important}
+body.ws .key{display:block;margin-top:30px;border-top:3px dashed var(--line);padding-top:20px}
+body.ws .choice{pointer-events:none}
+.key .kitem{margin-bottom:18px}.key .fig{max-width:520px}
+.key .stack{display:grid;grid-template-columns:1.2fr 1fr;gap:10px;max-width:760px}
+footer{color:var(--muted);font-size:14px;margin-top:30px;border-top:1px solid var(--line);padding-top:14px}
+footer a{color:inherit}
+@media (max-width:700px){.agrid{grid-template-columns:1fr}.qtext{font-size:20px}body{font-size:17px}}
+@media print{
+  body{font-size:13px} .wrap{padding:0;max-width:none}
+  .toolbar,.reveal,.answer{display:none!important}
+  .card,section.ref{border:1px solid #bbb;border-radius:10px;padding:12px;margin-bottom:12px}
+  .qtext{font-size:16px}
+  .fig{max-width:420px}
+  .choice{border:1px solid #999;padding:5px 10px;font-size:13px}
+  .choice.right,.choice.wrong{background:#fff;border-color:#999}
+  .choice .l,.choice.right .l,.choice.wrong .l{background:#fff;color:#000;border:1px solid #666}
+  .key{display:block;break-before:page}
+  .key .kitem{break-inside:avoid;border-bottom:1px solid #ccc;padding:8px 0}
+  .key .fig{max-width:380px}
+}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Subjects">
+  <a class="brand" href="../">Grade 4 <span>Learning Hub</span></a>
+  <ul>
+    <li><a href="../social-studies/" aria-current="page">Social Studies</a></li>
+    <li><span class="soon" aria-disabled="true">Math <small>soon</small></span></li>
+    <li><span class="soon" aria-disabled="true">Science <small>soon</small></span></li>
+    <li><span class="soon" aria-disabled="true">Language Arts <small>soon</small></span></li>
+  </ul>
+</nav>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker"><a href="../">Home</a> › Social Studies</div>
+    <h1>Regions of Canada: Quiz &amp; Picture Guide</h1>
+    <p class="sub">21 practice questions about Canada's provinces, its seven landform regions, its natural resources, and how the land shaped the lives of First Peoples. Every question has a picture, and every answer has a map or picture that explains it.</p>
+    <div class="parent"><strong>For grown-ups</strong>BC's Grade 4 Social Studies course is called <em>First Peoples and European Contact</em>. One of its topics is the <em>landforms and natural resources of Canada</em>, and a big idea is that the search for valuable resources changed the land and its communities. The questions below cover that topic. Teachers sometimes use slightly different names or numbers of regions, so check your child's class notes and use their teacher's names. Tap an answer to check it. To print, tap <b>Worksheet view</b> to hide the answers and add an answer key at the end, then press ⌘P.</div>
+  </header>
+
+  <div class="toolbar" role="region" aria-label="Quiz controls">
+    <div class="score" aria-live="polite" id="score">Answered 0 of 21</div>
+    <button class="btn" id="showall">Show all answers</button>
+    <button class="btn" id="reset">Start over</button>
+    <button class="btn primary" id="print" aria-pressed="false">Worksheet view</button>
+  </div>
+
+  <section class="ref" aria-labelledby="refh">
+    <h2 id="refh">Study map: Canada's 7 landform regions</h2>
+    <p class="sub">A <b>region</b> is an area where the land, weather, plants and animals are alike. Find the dot for Surrey. That's where you live!</p>
+    <div id="refmap"></div>
+    <ul class="legend" id="legend"></ul>
+  </section>
+
+  <main id="quiz"></main>
+
+  <section class="key" aria-label="Answer key">
+    <h2>Answer key</h2>
+    <div id="key"></div>
+  </section>
+
+  <footer>
+    Maps are drawn from <a href="https://www.naturalearthdata.com/">Natural Earth</a> data (public domain). Region borders are simplified for Grade 4 learners, and are not exact geological boundaries. Curriculum reference: <a href="https://curriculum.gov.bc.ca/curriculum/social-studies/4/core">BC Curriculum, Social Studies 4</a>. Surrey Schools are on the unceded territories of the Katzie, Kwantlen and Semiahmoo First Nations and other Coast Salish Peoples.
+  </footer>
+</div>
+
+<script src="mapdata.js"></script>
+<script>
+
+/* ---------- shared map geometry (defined once, reused with <use>) ---------- */
+(function defs(){
+  const all = Object.values(D.prov).join('');
+  let s = '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>';
+  s += `<path id="can" d="${all}"/>`;
+  for (const [k,d] of Object.entries(D.prov)) s += `<path id="p-${k}" d="${d}"/>`;
+  s += `<path id="nb" d="${D.neighbors.join('')}"/>`;
+  s += `<path id="lakes" d="${D.lakes.join('')}"/>`;
+  for (const [k,d] of Object.entries(D.rivers)) s += `<path id="r-${k.replace(/[^A-Za-z]/g,'')}" d="${d}"/>`;
+  for (const [k,d] of Object.entries(D.regions)) s += `<path id="rg-${k}" d="${d}"/>`;
+  s += '<clipPath id="clip-can"><use href="#can"/></clipPath>';
+  s += '</defs></svg>';
+  document.body.insertAdjacentHTML('afterbegin', s);
+})();
+
+const RC = {
+  cordillera:{n:1,name:'Cordillera',c:'#a27b5c',d:'Tall mountains, the Pacific coast, rainforests, salmon. Surrey is here!'},
+  plains:{n:2,name:'Interior Plains',c:'#f1d77a',d:'Flat prairie land, big skies, wheat and canola farms, oil and gas.'},
+  shield:{n:3,name:'Canadian Shield',c:'#d0605e',d:'The biggest region. Ancient rock, thousands of lakes, forests and minerals.'},
+  hbl:{n:4,name:'Hudson Bay Lowlands',c:'#7fb685',d:'Flat, wet and swampy (muskeg). Few people, lots of geese and polar bears.'},
+  lowlands:{n:5,name:'Great Lakes–St. Lawrence Lowlands',c:'#f2a541',d:'Smallest region but most people live here. Big cities and rich farmland.'},
+  appalachian:{n:6,name:'Appalachian',c:'#8f7cc3',d:'Old, rounded mountains and rocky Atlantic coasts. Fishing and forests.'},
+  arctic:{n:7,name:'Arctic',c:'#ffffff',d:'Very cold, treeless tundra on islands in the far north, with permafrost.'}
+};
+const ORDER = ['plains','cordillera','hbl','lowlands','appalachian','arctic'];
+const PROV_NAMES = {BC:'British Columbia',AB:'Alberta',SK:'Saskatchewan',MB:'Manitoba',ON:'Ontario',QC:'Quebec',NB:'New Brunswick',NS:'Nova Scotia',PE:'Prince Edward Island',NL:'Newfoundland and Labrador',YT:'Yukon',NT:'Northwest Territories',NU:'Nunavut'};
+const TERR = ['YT','NT','NU'];
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+let SCALE=1; const Z=(k,fn)=>{const o=SCALE;SCALE=k;try{return fn()}finally{SCALE=o}};
+function star(x,y,r=9,fill='#c8553d'){
+  r*=SCALE; let p='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*0.45:r;p+=(i?'L':'M')+(x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1);}
+  return `<path d="${p}Z" fill="${fill}" stroke="#fff" stroke-width="${1.5*SCALE}"/>`;
+}
+function label(x,y,t,{size=15,anchor='start',weight=800,fill='#1f2a37',halo='#fff'}={}){
+  size*=SCALE;
+  return `<text x="${x}" y="${y}" font-size="${size}" font-weight="${weight}" text-anchor="${anchor}" fill="${fill}" stroke="${halo}" stroke-width="${4*SCALE}" stroke-linejoin="round" paint-order="stroke" font-family="inherit">${esc(t)}</text>`;
+}
+function badge(x,y,t,{fill='#1f2a37',r=13,color='#fff',size=15}={}){
+  r*=SCALE; size*=SCALE;
+  return `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="#fff" stroke-width="${2.5*SCALE}"/><text x="${x}" y="${y+size*0.36}" text-anchor="middle" font-size="${size}" font-weight="800" fill="${color}" font-family="inherit">${esc(t)}</text>`;
+}
+const P = k => D.pts[k];
+
+/* map(o): o.regions (true) | o.focus (region key) | o.prov {code:color} | o.dim | o.rivers [{k,color,w}] | o.marks string | o.vb */
+function map(o={}){
+  const vb = o.vb || [0,0,D.W,D.H];
+  let s = `<svg class="map" viewBox="${vb.join(' ')}" role="img" aria-label="${esc(o.alt||'Map of Canada')}">`;
+  s += `<rect x="${vb[0]-20}" y="${vb[1]-20}" width="${vb[2]+40}" height="${vb[3]+40}" fill="#d7ebf7"/>`;
+  s += `<use href="#nb" fill="#ece9e2" stroke="#c9c3b6" stroke-width=".8"/>`;
+  if (o.regions || o.focus){
+    const f = k => o.focus ? (k===o.focus ? RC[k].c : '#ddd6c7') : RC[k].c;
+    s += `<g clip-path="url(#clip-can)"><use href="#can" fill="${f('shield')}"/>`;
+    for (const k of ORDER) s += `<use href="#rg-${k}" fill="${f(k)}"/>`;
+    s += `</g>`;
+    s += `<use href="#can" fill="none" stroke="#7b7062" stroke-width=".7" vector-effect="non-scaling-stroke"/>`;
+    for (const k in D.prov) s += `<use href="#p-${k}" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width=".8" vector-effect="non-scaling-stroke"/>`;
+  } else {
+    for (const k in D.prov){
+      const fill = (o.prov && o.prov[k]) || o.base || '#f6f1e7';
+      s += `<use href="#p-${k}" fill="${fill}" stroke="#8a7f70" stroke-width=".8" vector-effect="non-scaling-stroke"/>`;
+    }
+  }
+  s += `<use href="#lakes" fill="#d7ebf7"/>`;
+  for (const r of (o.rivers||[])) s += `<use href="#r-${r.k.replace(/[^A-Za-z]/g,'')}" fill="none" stroke="${r.color||'#3b82c4'}" stroke-width="${r.w||2.5}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>`;
+  if (o.nums) for (const k in RC){ const [x,y]=D.rl[k]; s += badge(x,y,RC[k].n,{fill:'#1f2a37'}); }
+  s += o.marks || '';
+  return s + '</svg>';
+}
+const dot = (k,t,opt={}) => { const [x,y]=P(k); return `<circle cx="${x}" cy="${y}" r="${(opt.r||5)*SCALE}" fill="${opt.fill||'#1f2a37'}" stroke="#fff" stroke-width="${2*SCALE}"/>` + (t?label(x+(opt.dx??9)*SCALE,y+(opt.dy??5)*SCALE,t,{anchor:opt.anchor||'start',size:opt.size||15}):''); };
+const surrey = (t='Surrey',dx=10,dy=16) => dot('Surrey', t, {fill:'#c8553d', r:6, dx, dy});
+
+/* ---------- scene illustrations (viewBox 0 0 320 200) ---------- */
+const SV = (inner, alt) => `<svg viewBox="0 0 320 200" role="img" aria-label="${esc(alt)}">${inner}</svg>`;
+const sky = (c1='#cfe8fb',c2='#f4fbff') => `<defs><linearGradient id="g${++SV.n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="320" height="200" fill="url(#g${SV.n})"/>`;
+SV.n = 0;
+const tree = (x,y,h=40,c='#2f6b45') => `<rect x="${x-2}" y="${y-6}" width="4" height="8" fill="#6b4a2f"/><path d="M${x},${y-h} L${x+h*0.32},${y-h*0.45} L${x+h*0.18},${y-h*0.45} L${x+h*0.42},${y-4} L${x-h*0.42},${y-4} L${x-h*0.18},${y-h*0.45} L${x-h*0.32},${y-h*0.45}Z" fill="${c}"/>`;
+const qmark = (x,y,size=44) => `<circle cx="${x}" cy="${y}" r="${size*0.62}" fill="#fff" stroke="#1f2a37" stroke-width="3"/><text x="${x}" y="${y+size*0.36}" text-anchor="middle" font-size="${size}" font-weight="900" fill="#c8553d" font-family="inherit">?</text>`;
+const tag = (x,y,t,anchor='middle') => Z(1,()=>label(x,y,t,{size:13,anchor}));
+
+const S = {
+  tiles(){ return SV(`
+    <rect width="320" height="200" fill="#fff"/>
+    <g><rect x="6" y="20" width="98" height="150" rx="10" fill="#cfe8fb"/><path d="M6,150 L36,70 L52,100 L70,55 L104,150Z" fill="#8a7a6a"/><path d="M62,70 L70,55 L78,72 L72,68 L66,74Z" fill="#fff"/><path d="M28,92 L36,70 L44,90 L38,86Z" fill="#fff"/>${tree(20,168,30)}${tree(90,168,34)}<rect x="6" y="150" width="98" height="20" fill="#5f9e6e"/></g>
+    <g><rect x="111" y="20" width="98" height="150" rx="10" fill="#e3f1fb"/><rect x="111" y="118" width="98" height="52" fill="#e7c65a"/><g stroke="#c49a2c" stroke-width="2">${[0,1,2,3,4,5,6,7].map(i=>`<line x1="${116+i*12}" y1="170" x2="${120+i*12}" y2="122"/>`).join('')}</g><rect x="176" y="72" width="20" height="46" fill="#b6533b"/><path d="M174,72 L186,58 L198,72Z" fill="#7d3a2a"/></g>
+    <g><rect x="216" y="20" width="98" height="150" rx="10" fill="#dfeaf3"/><rect x="216" y="128" width="98" height="42" fill="#f8fbfd"/><path d="M216,130 Q245,118 270,128 T314,124 L314,170 L216,170Z" fill="#fff" stroke="#c9d6e0"/><circle cx="236" cy="140" r="3" fill="#8aa36b"/><circle cx="262" cy="150" r="3" fill="#8aa36b"/><circle cx="295" cy="142" r="3" fill="#a3866b"/></g>
+    ${tag(55,190,'Mountains')}${tag(160,190,'Flat farmland')}${tag(265,190,'Frozen tundra')}`,
+    'Three small pictures: tall mountains with trees, flat wheat farmland with a grain elevator, and flat snowy tundra'); },
+
+  cordillera(q){ return SV(`${sky()}
+    <path d="M0,150 L50,60 L80,105 L120,35 L170,120 L210,55 L260,130 L290,90 L320,130 L320,200 L0,200Z" fill="#8c7b6b"/>
+    <path d="M108,56 L120,35 L132,58 L124,52 L116,60Z" fill="#fff"/><path d="M200,72 L210,55 L220,74 L212,68Z" fill="#fff"/><path d="M42,74 L50,60 L58,76 L50,70Z" fill="#fff"/>
+    <path d="M0,160 Q80,140 160,158 T320,150 L320,200 L0,200Z" fill="#4e8a5c"/>
+    ${[18,40,64,92,118,146].map((x,i)=>tree(x,175+i%2*6,34+i%3*6,'#2c5e3f')).join('')}
+    <path d="M170,200 Q220,170 320,172 L320,200Z" fill="#5aa6d6"/>
+    <path d="M232,186 q8,-6 16,0 q-8,5 -16,0Z" fill="#e0675a"/><path d="M228,186 l-5,-4 v8z" fill="#e0675a"/>
+    ${q?qmark(270,40,40):tag(115,22,'Mountains')+tag(70,196,'Rainforest')+tag(262,198,'Salmon')}`,
+    'Snowy mountains, a green rainforest of evergreen trees and a salmon swimming in the ocean'); },
+
+  plains(q){ return SV(`${sky('#bfe0fa','#fdf8e8')}
+    <circle cx="270" cy="42" r="18" fill="#f9d65c"/>
+    <rect y="128" width="320" height="72" fill="#e8c55a"/>
+    <path d="M0,128 L320,128" stroke="#c8a540" stroke-width="2"/>
+    <g stroke="#c49a2c" stroke-width="2.4" stroke-linecap="round">${Array.from({length:26},(_,i)=>`<line x1="${8+i*12}" y1="200" x2="${12+i*12}" y2="${150+(i%3)*6}"/><circle cx="${12+i*12}" cy="${148+(i%3)*6}" r="3" fill="#d9ad3c" stroke="none"/>`).join('')}</g>
+    <rect x="200" y="74" width="28" height="56" fill="#b6533b"/><path d="M197,74 L214,54 L231,74Z" fill="#7d3a2a"/><rect x="228" y="98" width="30" height="32" fill="#c4674e"/>
+    <path d="M40,128 h60" stroke="#6d6d6d" stroke-width="2"/>
+    ${q?qmark(90,70,40):tag(214,46,'Grain elevator')+tag(80,118,'Flat prairie')+tag(110,192,'Wheat')}`,
+    'Flat golden wheat fields under a big sky, with a red grain elevator'); },
+
+  shield(q){ return SV(`${sky()}
+    <path d="M0,120 Q60,95 120,115 T240,105 T320,115 L320,200 L0,200Z" fill="#6f8a5b"/>
+    ${[20,50,250,280,300].map((x,i)=>tree(x,124-i%2*4,38,'#2c5e3f')).join('')}
+    <ellipse cx="160" cy="160" rx="130" ry="28" fill="#5aa6d6"/>
+    <path d="M30,175 Q60,140 110,168 Q80,190 30,190Z" fill="#9a8f86"/><path d="M60,160 q14,-10 26,0" stroke="#7d746c" stroke-width="2" fill="none"/>
+    <path d="M200,182 Q240,150 300,172 L300,195 L200,195Z" fill="#a99f96"/>
+    <path d="M150,156 q10,-8 20,0 q-10,4 -20,0Z" fill="#1f2a37"/><circle cx="168" cy="151" r="4" fill="#1f2a37"/>
+    ${q?qmark(160,60,40):tag(70,150,'Ancient rock')+tag(160,140,'Lakes')+tag(270,90,'Forests')}`,
+    'Rounded grey rock, a blue lake with a loon, and evergreen forest'); },
+
+  lowlands(q){ return SV(`${sky()}
+    <rect y="120" width="320" height="80" fill="#7cb36b"/>
+    <g fill="#5d7fa6">${[[150,60,20,60],[172,40,18,80],[192,70,22,50],[216,30,16,90],[234,62,24,58],[260,80,18,40]].map(([x,y,w,h])=>`<rect x="${x}" y="${y}" width="${w}" height="${h}"/>`).join('')}</g>
+    <path d="M222,30 v-22" stroke="#5d7fa6" stroke-width="3"/>
+    <g fill="#e9f0f8">${Array.from({length:18},(_,i)=>`<rect x="${154+(i%6)*20}" y="${84+Math.floor(i/6)*12}" width="5" height="5"/>`).join('')}</g>
+    <rect x="20" y="96" width="40" height="28" fill="#c0392b"/><path d="M16,96 L40,78 L64,96Z" fill="#7b2418"/>
+    <g stroke="#4f8a3f" stroke-width="3">${[0,1,2,3,4].map(i=>`<path d="M10,${140+i*10} Q70,${136+i*10} 130,${140+i*10}" fill="none"/>`).join('')}</g>
+    <path d="M140,200 Q200,160 320,170 L320,200Z" fill="#5aa6d6"/>
+    ${q?qmark(80,40,40):tag(210,22,'Big cities')+tag(56,190,'Rich farmland')+tag(270,192,'Great Lakes')}`,
+    'A busy city skyline next to a red barn, green farm fields and a big lake'); },
+
+  appalachian(q){ return SV(`${sky()}
+    <path d="M0,130 Q50,80 100,120 Q150,70 200,118 Q240,90 320,120 L320,200 L0,200Z" fill="#7d9b6a"/>
+    ${[30,60,140,170].map(x=>tree(x,140,30,'#3f6e4b')).join('')}
+    <path d="M0,160 Q160,150 320,158 L320,200 L0,200Z" fill="#4b93c4"/>
+    <path d="M240,160 l8,-64 h12 l8,64Z" fill="#fff" stroke="#9aa"/><rect x="246" y="112" width="20" height="10" fill="#c8553d"/><rect x="246" y="136" width="20" height="10" fill="#c8553d"/><rect x="246" y="86" width="20" height="10" fill="#f9d65c"/><path d="M244,86 l12,-10 l12,10Z" fill="#c8553d"/>
+    <path d="M60,178 h70 l-10,12 h-50Z" fill="#c8553d"/><rect x="88" y="160" width="16" height="18" fill="#fff"/><path d="M96,160 v-18" stroke="#555" stroke-width="2"/>
+    <path d="M10,192 q10,-6 20,0 t20,0 t20,0" stroke="#e6f3fb" stroke-width="2" fill="none"/>
+    ${q?qmark(160,40,40):tag(100,72,'Old, rounded mountains')+tag(256,182,'Lighthouse')+tag(95,152,'Fishing boat')}`,
+    'Low, rounded green hills, a red and white lighthouse and a fishing boat on the Atlantic Ocean'); },
+
+  arctic(q){ return SV(`${sky('#b9d6ee','#eef6fb')}
+    <path d="M0,120 L40,90 L70,115 L110,80 L150,118 Z" fill="#dfe8ef"/>
+    <rect y="118" width="320" height="82" fill="#f7fbfd"/>
+    <path d="M0,140 Q100,128 200,142 T320,136" stroke="#d2e0ea" stroke-width="2" fill="none"/>
+    <path d="M200,200 L230,150 L320,150 L320,200Z" fill="#8fc6e6"/>
+    <g fill="#8aa36b">${[30,60,90,140].map(x=>`<circle cx="${x}" cy="${170+(x%3)*4}" r="3"/>`).join('')}</g>
+    <g fill="#fff" stroke="#9fb2c0" stroke-width="1.5"><ellipse cx="270" cy="136" rx="26" ry="14"/><circle cx="296" cy="130" r="9"/><rect x="252" y="142" width="7" height="12" rx="3"/><rect x="278" y="142" width="7" height="12" rx="3"/></g><circle cx="300" cy="128" r="1.6" fill="#1f2a37"/>
+    ${q?qmark(160,50,40):tag(80,112,'Treeless tundra')+tag(110,192,'Tiny plants, no trees')+tag(272,110,'Polar bear')}`,
+    'Flat snowy tundra with tiny plants, low icy hills and a polar bear'); },
+
+  hbl(q){ return SV(`${sky()}
+    <rect y="110" width="320" height="90" fill="#7f9e5a"/>
+    <g fill="#6aa9cf">${[[40,140,40,9],[140,160,60,12],[250,135,40,8],[90,182,50,9],[230,180,55,10]].map(([x,y,rx,ry])=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}"/>`).join('')}</g>
+    <g stroke="#4d6b33" stroke-width="2">${[12,20,110,118,200,290,298].map(x=>`<line x1="${x}" y1="150" x2="${x+2}" y2="128"/>`).join('')}</g>
+    ${[70,180,300].map(x=>tree(x,124,22,'#3b5b3a')).join('')}
+    <path d="M200,60 l14,6 l14,-6 M240,46 l10,5 l10,-5 M170,44 l9,4 l9,-4" stroke="#1f2a37" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    ${q?qmark(90,55,40):tag(150,186,'Wet, swampy muskeg')+tag(215,32,'Geese')+tag(70,100,'Short trees')}`,
+    'Flat wet land with many small ponds, reeds, short trees and geese flying overhead'); },
+
+  permafrost(q){ return SV(`
+    <rect width="320" height="200" fill="#eaf4fb"/>
+    <rect y="40" width="320" height="18" fill="#a3b07a"/>
+    <g fill="#6f8a4a">${[20,70,140,200,260,300].map(x=>`<circle cx="${x}" cy="40" r="4"/>`).join('')}</g>
+    <rect y="58" width="320" height="34" fill="#8b6b4a"/>
+    <rect y="92" width="320" height="108" fill="#9cb3c8"/>
+    <g stroke="#e7f2fb" stroke-width="2">${Array.from({length:14},(_,i)=>{const x=16+i*22,y=110+(i%3)*28;return `<path d="M${x-6},${y} h12 M${x},${y-6} v12 M${x-4},${y-4} l8,8 M${x+4},${y-4} l-8,8"/>`}).join('')}</g>
+    ${q? qmark(160,146,40) + label(160,80,'Thaws in summer',{size:14,anchor:'middle',fill:'#fff',halo:'#5e4630'})
+       : label(160,80,'Top layer thaws in summer',{size:14,anchor:'middle',fill:'#fff',halo:'#5e4630'})+label(160,150,'PERMAFROST: frozen all year',{size:17,anchor:'middle',fill:'#1f2a37'})+label(160,176,'(for at least 2 years in a row)',{size:13,anchor:'middle',weight:600})}
+    ${tag(160,28,'Tundra surface')}`,
+    'A slice of the ground: a thin top layer that thaws in summer, and a deep layer below with ice crystals'); },
+
+  peak(q){ return SV(`${sky()}
+    <path d="M0,200 L70,120 L110,150 L175,30 L240,140 L270,115 L320,170 L320,200Z" fill="#7d6e62"/>
+    <path d="M150,72 L175,30 L200,76 L188,68 L178,80 L166,66Z" fill="#fff"/>
+    <path d="M175,30 v-20" stroke="#1f2a37" stroke-width="2"/><path d="M175,10 l16,5 l-16,5Z" fill="#d52b1e"/>
+    <path d="M0,200 L40,170 L80,200Z" fill="#fff" opacity=".7"/>
+    ${q?qmark(60,60,38):tag(250,40,'5,959 m tall')+tag(175,196,'Mount Logan, Yukon')}`,
+    'A very tall snowy mountain with a small flag on its peak'); },
+
+  cedar(q){ return SV(`${sky()}
+    <rect y="140" width="320" height="60" fill="#6b9b5e"/>
+    <path d="M0,170 Q160,160 320,172 L320,200 L0,200Z" fill="#5aa6d6"/>
+    <g><rect x="46" y="60" width="12" height="90" fill="#8b4a2b"/>
+      <path d="M52,10 C30,40 18,70 14,110 L90,110 C86,70 74,40 52,10Z" fill="#3f7a4f"/><path d="M52,30 C40,55 34,80 30,104 M52,30 C64,55 70,80 74,104" stroke="#2f5e3c" stroke-width="2" fill="none"/></g>
+    <g><path d="M140,140 v-48 l60,-20 l60,20 v48Z" fill="#a0673f" stroke="#6b4426" stroke-width="2"/>
+      <g stroke="#6b4426" stroke-width="1.5">${[0,1,2,3,4,5,6,7,8,9].map(i=>`<line x1="${146+i*12}" y1="${i<5?92-(i*4):92-((9-i)*4)}" x2="${146+i*12}" y2="140"/>`).join('')}</g>
+      <rect x="190" y="112" width="20" height="28" fill="#3b2516"/></g>
+    <path d="M196,184 q60,10 110,-4 l-8,10 q-50,8 -96,0Z" fill="#8b4a2b"/><path d="M300,180 l10,-10" stroke="#8b4a2b" stroke-width="4"/>
+    ${q?qmark(52,64,38):tag(52,130,'Western red cedar')+tag(200,64,'Cedar plank house')+tag(250,170,'Cedar canoe')}`,
+    'A tall cedar tree next to a wooden plank house, with a wooden canoe on the water'); },
+
+  bison(q){ return SV(`${sky('#bfe0fa','#fdf8e8')}
+    <rect y="130" width="320" height="70" fill="#d8c27a"/>
+    <g><path d="M210,128 L246,40 L282,128Z" fill="#efe3c8" stroke="#8b6b4a" stroke-width="2"/><path d="M240,54 l-8,-18 M252,54 l8,-18 M246,48 v-14" stroke="#6b4426" stroke-width="2.5"/>
+      <path d="M232,128 l14,-30 l14,30Z" fill="#6b4426"/><path d="M222,96 h48" stroke="#c8553d" stroke-width="3"/><circle cx="246" cy="80" r="5" fill="#2e6fb0"/></g>
+    ${q? qmark(100,110,44) : `<g><path d="M40,150 C40,110 70,92 104,98 C130,90 152,104 156,126 C162,130 166,142 160,150 Z" fill="#5a3b24"/>
+      <path d="M150,112 C168,110 176,126 172,142 L158,148Z" fill="#3e2717"/><path d="M164,112 q6,-8 2,-14" stroke="#e8e0d0" stroke-width="3" fill="none"/>
+      ${[54,74,118,138].map(x=>`<rect x="${x}" y="146" width="9" height="22" rx="3" fill="#3e2717"/>`).join('')}<circle cx="166" cy="124" r="2" fill="#fff"/><path d="M40,124 q-10,6 -8,18" stroke="#3e2717" stroke-width="3" fill="none"/></g>`}
+    ${q?'':tag(104,86,'Bison')+tag(246,150,'Tipi')}`,
+    'A tipi on the flat prairie' ); },
+
+  beaver(q){ return SV(`${sky()}
+    <rect y="120" width="320" height="80" fill="#5aa6d6"/>
+    <path d="M0,124 Q80,112 160,122 T320,118 L320,128 L0,128Z" fill="#6f8a5b"/>
+    ${[20,50,270,300].map(x=>tree(x,122,34,'#2c5e3f')).join('')}
+    <path d="M150,176 q70,14 150,-2 l-10,12 q-70,10 -130,0Z" fill="#c8874a"/><rect x="200" y="160" width="30" height="16" rx="3" fill="#7a5235"/><path d="M200,166 h30" stroke="#5b3b22" stroke-width="2"/>
+    ${q? qmark(70,150,40) : `<g><ellipse cx="78" cy="158" rx="38" ry="22" fill="#7a4f2e"/><circle cx="112" cy="146" r="15" fill="#7a4f2e"/><circle cx="118" cy="142" r="2.4" fill="#1f2a37"/><rect x="120" y="152" width="5" height="6" fill="#fff"/><circle cx="108" cy="134" r="4" fill="#5b3b22"/>
+      <ellipse cx="36" cy="170" rx="22" ry="9" fill="#3e2717" transform="rotate(-18 36 170)"/><g stroke="#2a1a0e" stroke-width="1">${[0,1,2,3].map(i=>`<line x1="${22+i*8}" y1="166" x2="${26+i*8}" y2="176"/>`).join('')}</g></g>`}
+    ${q?'':tag(78,128,'Beaver')+tag(230,152,'Furs for trading')}`,
+    'A canoe loaded with a bundle of furs paddling on a lake surrounded by forest'); },
+
+  minerals(q){ return SV(`
+    <rect width="320" height="200" fill="#f3efe6"/>
+    <path d="M20,170 Q60,110 120,140 Q170,100 230,138 Q270,120 300,170Z" fill="#8f8780"/>
+    <g fill="#f2c94c">${[[70,150],[110,140],[180,138],[200,150],[240,152],[150,155]].map(([x,y])=>`<path d="M${x},${y-6} l5,6 l-5,6 l-5,-6Z"/>`).join('')}</g>
+    <g fill="#c77a4a">${[[90,158],[160,146],[220,160]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5"/>`).join('')}</g>
+    <g fill="#c0c7cf">${[[130,160],[260,160]].map(([x,y])=>`<rect x="${x-5}" y="${y-5}" width="10" height="10" rx="2"/>`).join('')}</g>
+    <g transform="rotate(-30 240 70)"><rect x="236" y="40" width="8" height="80" rx="3" fill="#8b5a32"/><path d="M200,48 Q240,26 280,48 L276,54 Q240,38 204,54Z" fill="#6c757d"/></g>
+    ${q?qmark(80,60,40):tag(160,190,'Gold, nickel, copper and iron')+tag(80,70,'Minerals in ancient rock')}`,
+    'A pile of rock with sparkly gold, copper and silver-coloured pieces, and a pickaxe'); },
+};
+
+/* ---------- questions ---------- */
+const Q = [
+ { topic:'Provinces & territories', q:'Canada is divided into provinces and territories. How many of each are there?',
+   choices:['10 provinces and 3 territories','13 provinces and no territories','9 provinces and 4 territories','3 provinces and 10 territories'], a:0,
+   qart:()=>map({base:'#f6f1e7',alt:'Outline map of Canada showing its 13 parts',marks:Object.entries(D.lab).map(([k,[x,y]])=>`<text x="${x}" y="${y+5}" text-anchor="middle" font-size="16" font-weight="900" fill="#c8553d">?</text>`).join('')}),
+   aart:()=>map({prov:Object.fromEntries(Object.keys(D.prov).map(k=>[k,TERR.includes(k)?'#9fd3b4':'#f4c27a'])),alt:'Map with the 10 provinces in orange and the 3 territories in green',
+     marks: label(150,210,'3 territories',{size:22,fill:'#1d6b43'})+label(250,600,'10 provinces',{size:22,fill:'#a5561a'})+Object.entries(D.lab).filter(([k])=>!['PE','NS','NB'].includes(k)).map(([k,[x,y]])=>label(x,y+5,k,{size:13,anchor:'middle'})).join('')}),
+   explain:'Canada has <b>10 provinces</b> and <b>3 territories</b>, which makes 13 in all. The territories are the three big areas in the north.',
+   fun:'Nunavut is Canada\'s newest territory. It was created in 1999, so it\'s younger than your parents!' },
+
+ { topic:'Provinces & territories', q:'Surrey is in which province?',
+   choices:['Alberta','British Columbia','Ontario','Yukon'], a:1,
+   qart:()=>map({alt:'Map of Canada with a red dot on Surrey',marks:surrey('You live here!')}),
+   aart:()=>map({prov:{BC:'#f4c27a'},alt:'Map with British Columbia highlighted, Surrey marked and a star on Victoria',marks:surrey('Surrey',10,-6)+(()=>{const [x,y]=P('Victoria');return star(x,y,10)+label(x+12,y+24,'Victoria (capital)',{size:16,anchor:'start'});})()+label(118,400,'British Columbia',{size:20,anchor:'middle'})}),
+   explain:'Surrey is in <b>British Columbia</b> (BC), Canada\'s most western province. BC\'s capital city is <b>Victoria</b>, on Vancouver Island.',
+   fun:'BC is the only province that touches the Pacific Ocean.' },
+
+ { topic:'Provinces & territories', q:'Which list names Canada\'s three territories?',
+   choices:['Yukon, Northwest Territories, Nunavut','Yukon, Alaska, Nunavut','Manitoba, Nunavut, Quebec','Greenland, Yukon, Nunavut'], a:0,
+   qart:()=>map({prov:{YT:'#c9c2b4',NT:'#c9c2b4',NU:'#c9c2b4'},alt:'Map with the three northern areas shaded grey and marked with question marks',marks:['YT','NT','NU'].map(k=>{const [x,y]=D.lab[k];return badge(x,y,'?',{fill:'#c8553d'});}).join('')}),
+   aart:()=>map({prov:{YT:'#9fd3b4',NT:'#7cc39c',NU:'#5fb085'},alt:'Map highlighting Yukon, Northwest Territories and Nunavut with their capitals',
+     marks:label(D.lab.YT[0],D.lab.YT[1]-24,'Yukon',{anchor:'middle',size:15})+label(D.lab.NT[0],D.lab.NT[1]-14,'Northwest Territories',{anchor:'middle',size:15})+label(D.lab.NU[0],D.lab.NU[1],'Nunavut',{anchor:'middle',size:17})+dot('Whitehorse','Whitehorse',{dy:16})+dot('Yellowknife','Yellowknife',{dy:16})+dot('Iqaluit','Iqaluit',{dy:-8})}),
+   explain:'The territories are <b>Yukon</b> (capital Whitehorse), the <b>Northwest Territories</b> (capital Yellowknife) and <b>Nunavut</b> (capital Iqaluit). Alaska belongs to the United States, and Greenland is part of Denmark.',
+   fun:'The territories cover about 40% of Canada, but fewer than 1 out of every 200 Canadians live there.' },
+
+ { topic:'Provinces & territories', q:'What is the capital city of Canada? Each lettered dot on the map is one of the choices.',
+   choices:['Toronto','Ottawa','Victoria','Montreal'], a:1,
+   qart:()=>map({alt:'Map of Canada with lettered dots on four cities',marks:[['Toronto','A',0,14],['Ottawa','B',-14,-10],['Victoria','C',0,14],['Montreal','D',14,-10]].map(([k,t,dx,dy])=>{const [x,y]=P(k);return `<circle cx="${x}" cy="${y}" r="4" fill="#1f2a37"/>`+badge(x+dx,y+dy,t,{r:10,size:12,fill:'#c8553d'});}).join('')}),
+   aart:()=>map({prov:{ON:'#f4c27a'},alt:'Map with Ontario highlighted and a star on Ottawa',marks:(()=>{const [x,y]=P('Ottawa');return star(x,y,12)+label(x+4,y-16,'Ottawa',{size:18,anchor:'middle'})+dot('Toronto','Toronto',{dy:16,anchor:'end',dx:-8})+dot('Montreal','Montreal',{dx:9,dy:14});})()+label(470,470,'Ontario',{size:16,anchor:'middle'})}),
+   explain:'<b>Ottawa</b>, in Ontario, is Canada\'s capital. Canada\'s Parliament meets there. Toronto is Ontario\'s <i>provincial</i> capital and Canada\'s biggest city.',
+   fun:'Ottawa sits right on the border between Ontario and Quebec, along the Ottawa River.' },
+
+ { topic:'Provinces & territories', q:'Which is the smallest province in Canada?',
+   choices:['Nova Scotia','New Brunswick','Prince Edward Island','Newfoundland and Labrador'], a:2,
+   qart:()=>Z(0.3,()=>map({vb:[610,380,170,170],prov:{NS:'#e7dfcf',NB:'#e7dfcf',PE:'#e7dfcf',NL:'#e7dfcf'},alt:'Close-up map of the Atlantic provinces',marks:[[D.lab.NS,'A'],[D.lab.NB,'B'],[[D.lab.PE[0],D.lab.PE[1]-12],'C'],[[740,410],'D']].map(([[x,y],t])=>badge(x,y,t,{r:13,size:15})).join('')})),
+   aart:()=>Z(0.3,()=>map({vb:[610,380,170,170],prov:{PE:'#c8553d',NS:'#efe6d6',NB:'#efe6d6',NL:'#efe6d6'},alt:'Close-up map with Prince Edward Island highlighted in red',marks:label(D.lab.PE[0],D.lab.PE[1]-12,'Prince Edward Island',{size:20,anchor:'middle',fill:'#c8553d'})+label(D.lab.NS[0]+8,D.lab.NS[1]+14,'Nova Scotia',{size:15,anchor:'middle',weight:700})+label(D.lab.NB[0]-8,D.lab.NB[1]+10,'New Brunswick',{size:15,anchor:'middle',weight:700})+label(737,420,'Newfoundland',{size:15,anchor:'middle',weight:700})})),
+   explain:'<b>Prince Edward Island</b> (PEI) is the smallest province. It\'s an island in the Gulf of St. Lawrence, famous for its red soil and potatoes.',
+   fun:'You could drive across PEI from one end to the other in about 3 hours.' },
+
+ { topic:'Physical geography', q:'Canada touches three oceans. Which three?',
+   choices:['Pacific, Atlantic, Indian','Pacific, Arctic, Atlantic','Arctic, Indian, Southern','Atlantic, Arctic, Southern'], a:1,
+   qart:()=>map({alt:'Map of Canada with question marks in the oceans to the west, north and east',marks:badge(30,420,'?',{fill:'#c8553d',r:16,size:20})+badge(240,110,'?',{fill:'#c8553d',r:16,size:20})+badge(770,500,'?',{fill:'#c8553d',r:16,size:20})}),
+   aart:()=>map({alt:'Map showing the Pacific Ocean to the west, the Arctic Ocean to the north and the Atlantic Ocean to the east',marks:label(16,410,'PACIFIC',{size:18,fill:'#1f5f99'})+label(16,430,'OCEAN',{size:18,fill:'#1f5f99'})+label(220,100,'ARCTIC OCEAN',{size:20,fill:'#1f5f99'})+label(790,540,'ATLANTIC',{size:18,anchor:'end',fill:'#1f5f99'})+label(790,560,'OCEAN',{size:18,anchor:'end',fill:'#1f5f99'})+label(D.pts['Hudson Bay'][0],D.pts['Hudson Bay'][1],'Hudson Bay',{size:13,anchor:'middle',fill:'#1f5f99'})}),
+   explain:'Canada has the <b>Pacific Ocean</b> to the west, the <b>Arctic Ocean</b> to the north and the <b>Atlantic Ocean</b> to the east. Canada\'s motto, "From sea to sea," is about its oceans.',
+   fun:'Canada has the longest coastline of any country in the world!' },
+
+ { topic:'Landform regions', q:'What is a geographic "region"?',
+   choices:['A city with a lot of people','An area where the land, climate, plants and animals are alike','Another word for a province','A kind of map'], a:1,
+   qart:()=>`<div class="scene">${S.tiles()}</div>`,
+   aart:()=>map({regions:true,nums:true,alt:'Map of Canada coloured by its seven landform regions, numbered 1 to 7'}),
+   explain:'A <b>region</b> is an area that has things in common, like landforms, weather, plants and animals. These things make it different from the areas around it. Region lines don\'t follow province lines. BC has parts of more than one region!',
+   fun:'Most Grade 4 classes learn <b>7</b> landform regions in Canada. Some books split them a little differently.' },
+
+ { topic:'Landform regions', q:'Look at the numbered map. Which region is Surrey in?',
+   choices:['Interior Plains','Canadian Shield','Cordillera','Appalachian'], a:2,
+   qart:()=>map({regions:true,nums:true,alt:'Numbered map of the seven regions with a red dot on Surrey',marks:surrey('Surrey')}),
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'cordillera',alt:'Map with the Cordillera region highlighted along the west coast',marks:surrey()+label(105,320,'Cordillera',{size:18,anchor:'middle'})}))}${S.cordillera()}</div>`,
+   explain:'Surrey is in the <b>Cordillera</b> (say: cor-dee-YAIR-a). It\'s a region of tall mountains like the Coast Mountains and the Rocky Mountains, plus valleys, a rainy coast and big forests. People there work in forestry, fishing, mining and tourism.',
+   fun:'The Fraser River flows through the Cordillera and reaches the ocean right beside Surrey. Salmon swim up it every year.' },
+
+ { topic:'Landform regions', q:'Which is the BIGGEST region? It wraps around Hudson Bay like a giant horseshoe, and has very old rock and thousands of lakes.',
+   choices:['Canadian Shield','Hudson Bay Lowlands','Arctic','Interior Plains'], a:0,
+   qart:()=>`<div class="scene">${S.shield(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'shield',alt:'Map with the Canadian Shield highlighted, curving around Hudson Bay',marks:label(D.rl.shield[0],D.rl.shield[1],'Canadian Shield',{size:20,anchor:'middle'})+label(D.pts['Hudson Bay'][0],D.pts['Hudson Bay'][1],'Hudson Bay',{size:13,anchor:'middle',fill:'#1f5f99'})}))}${S.shield()}</div>`,
+   explain:'The <b>Canadian Shield</b> covers about half of Canada. Its rock is some of the oldest on Earth. Glaciers scraped it flat long ago and left behind thousands of lakes. It\'s rich in <b>minerals</b>, <b>forests</b> and <b>fresh water</b>.',
+   fun:'Some rocks in the Shield are about 4 billion years old!' },
+
+ { topic:'Landform regions', q:'Which region is flat, with big skies and huge wheat farms? It\'s sometimes called "Canada\'s breadbasket."',
+   choices:['Cordillera','Appalachian','Interior Plains','Arctic'], a:2,
+   qart:()=>`<div class="scene">${S.plains(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'plains',alt:'Map with the Interior Plains highlighted from the US border north to the Arctic',marks:label(D.rl.plains[0],D.rl.plains[1]+40,'Interior Plains',{size:18,anchor:'middle'})+dot('Regina','Regina',{dy:16})}))}${S.plains()}</div>`,
+   explain:'The <b>Interior Plains</b> (the prairies) stretch across Alberta, Saskatchewan and Manitoba, and north into the Northwest Territories. The land is flat with rich soil, perfect for <b>wheat, canola and cattle</b>. There\'s also lots of <b>oil and natural gas</b> underground.',
+   fun:'The tall buildings beside railways on the prairies are grain elevators. They store farmers\' wheat until a train carries it away.' },
+
+ { topic:'Landform regions', q:'Which region is the smallest, but is home to the most people and big cities like Toronto and Montreal?',
+   choices:['Great Lakes–St. Lawrence Lowlands','Hudson Bay Lowlands','Canadian Shield','Cordillera'], a:0,
+   qart:()=>`<div class="scene">${S.lowlands(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(0.62,()=>map({focus:'lowlands',vb:[400,420,330,240],alt:'Close-up map with the Great Lakes–St. Lawrence Lowlands highlighted along the Great Lakes and St. Lawrence River',rivers:[{k:'St. Lawrence',color:'#2f7fc0',w:2}],marks:dot('Toronto','Toronto',{dy:16})+dot('Montreal','Montreal',{dx:-8,dy:-8,anchor:'end'})+dot('Ottawa','Ottawa',{dx:-8,dy:-6,anchor:'end'})+dot('Quebec City','Quebec City',{dx:-8,dy:-8,anchor:'end'})+label(470,640,'Great Lakes',{size:13,anchor:'middle',fill:'#1f5f99'})}))}${S.lowlands()}</div>`,
+   explain:'The <b>Great Lakes–St. Lawrence Lowlands</b> run along the Great Lakes and the St. Lawrence River in southern Ontario and Quebec. About half of all Canadians live there! It has a mild climate, rich farmland, and many factories and cities.',
+   fun:'The St. Lawrence River lets big ships sail from the Atlantic Ocean all the way to the Great Lakes.' },
+
+ { topic:'Landform regions', q:'Which region has old, rounded mountains and rocky coasts on the Atlantic Ocean, where many people fish?',
+   choices:['Arctic','Appalachian','Interior Plains','Cordillera'], a:1,
+   qart:()=>`<div class="scene">${S.appalachian(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(0.45,()=>map({focus:'appalachian',vb:[560,360,240,220],alt:'Close-up map with the Appalachian region highlighted in the Atlantic provinces and southern Quebec',marks:label(650,560,'Appalachian',{size:16,anchor:'middle'})+dot('Halifax','Halifax',{dy:16})+dot("St. John's","St. John's",{dx:-8,dy:-8,anchor:'end'})}))}${S.appalachian()}</div>`,
+   explain:'The <b>Appalachian</b> region covers New Brunswick, Nova Scotia, PEI, the island of Newfoundland and part of Quebec. Its mountains are very old and have been worn down into round hills. <b>Fishing</b>, <b>forestry</b> and farming are important here.',
+   fun:'The Appalachian Mountains are so old that they formed before the dinosaurs lived!' },
+
+ { topic:'Landform regions', q:'Which region is the coldest, with no trees, frozen ground and islands in the far north?',
+   choices:['Hudson Bay Lowlands','Canadian Shield','Arctic','Cordillera'], a:2,
+   qart:()=>`<div class="scene">${S.arctic(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'arctic',alt:'Map with the Arctic region highlighted on the northern islands',marks:label(D.rl.arctic[0],D.rl.arctic[1]+30,'Arctic',{size:20,anchor:'middle'})}))}${S.arctic()}</div>`,
+   explain:'The <b>Arctic</b> region is on Canada\'s northern islands. Winters are long, dark and very cold, and summers are short. It\'s too cold for trees, so the land is <b>tundra</b>, covered with mosses, lichens and tiny flowers in summer.',
+   fun:'In the Arctic summer, the sun doesn\'t set for weeks. It\'s called the "midnight sun."' },
+
+ { topic:'Landform regions', q:'Which region is flat, wet and swampy, with land called "muskeg," south of Hudson Bay?',
+   choices:['Interior Plains','Hudson Bay Lowlands','Appalachian','Great Lakes–St. Lawrence Lowlands'], a:1,
+   qart:()=>`<div class="scene">${S.hbl(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'hbl',alt:'Map with the Hudson Bay Lowlands highlighted along the south shore of Hudson Bay',marks:label(D.rl.hbl[0]-10,D.rl.hbl[1]+34,'Hudson Bay Lowlands',{size:16,anchor:'middle'})+dot('Churchill','Churchill',{dx:-8,anchor:'end'})}))}${S.hbl()}</div>`,
+   explain:'The <b>Hudson Bay Lowlands</b> are flat and soggy because water can\'t drain away easily. The wet, spongy ground is called <b>muskeg</b>. Very few people live there, but it\'s home to geese, caribou and polar bears.',
+   fun:'Churchill, Manitoba, near the edge of this region, is called the "Polar Bear Capital of the World."' },
+
+ { topic:'Landform regions', q:'In the Arctic, what is "permafrost"?',
+   choices:['A big snowstorm','Ice floating on the ocean','Ground that stays frozen all year','A kind of Arctic plant'], a:2,
+   qart:()=>`<div class="scene">${S.permafrost(true)}</div>`,
+   aart:()=>`<div class="scene">${S.permafrost()}</div>`,
+   explain:'<b>Permafrost</b> is ground that stays frozen all year round. Only a thin top layer thaws in summer. Trees can\'t grow their roots down into it, which is one reason the tundra has no trees.',
+   fun:'When permafrost melts, the ground can sink and buildings can tilt, so Arctic houses are often built on stilts.' },
+
+ { topic:'Physical geography', q:'What is the tallest mountain in Canada?',
+   choices:['Mount Robson','Mount Logan','Whistler Mountain','Mount Everest'], a:1,
+   qart:()=>`<div class="scene">${S.peak(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'cordillera',alt:'Map with a star on Mount Logan in the southwest corner of Yukon',marks:(()=>{const [x,y]=P('Mount Logan');return star(x,y,11)+label(x+14,y+5,'Mount Logan',{size:16});})()}))}${S.peak()}</div>`,
+   explain:'<b>Mount Logan</b>, in Yukon\'s Kluane National Park, is Canada\'s tallest mountain at about <b>5,959 m</b>. It\'s in the Cordillera. Mount Robson is the tallest in the Canadian Rockies. Mount Everest is the tallest in the world, but it\'s in Asia.',
+   fun:'Mount Logan is so wide at its base that it may be the most massive mountain on Earth.' },
+
+ { topic:'Physical geography', q:'Which is the longest river in Canada? Each river on the map has a letter that matches a choice.',
+   choices:['Fraser River','Mackenzie River','St. Lawrence River','Yukon River'], a:1,
+   qart:()=>map({alt:'Map of Canada with four rivers drawn in blue and labelled A to D',rivers:[{k:'Fraser',w:3},{k:'Mackenzie',w:3},{k:'St. Lawrence',w:3},{k:'Yukon',w:3}],marks:badge(80,430,'A',{r:11,size:13})+badge(190,230,'B',{r:11,size:13})+badge(625,505,'C',{r:11,size:13})+badge(50,225,'D',{r:11,size:13})}),
+   aart:()=>map({alt:'Map with the Mackenzie River highlighted, flowing north from Great Slave Lake to the Arctic Ocean',rivers:[{k:'Mackenzie',color:'#c8553d',w:4}],marks:label(150,250,'Mackenzie River',{size:17,anchor:'end'})+label(220,140,'→ to the Arctic Ocean',{size:13,anchor:'middle'})+dot('Yellowknife','',{r:4})}),
+   explain:'The <b>Mackenzie River</b> in the Northwest Territories is Canada\'s longest. Together with the rivers that flow into it, it\'s over 4,000 km long! It flows <b>north</b> into the Arctic Ocean.',
+   fun:'In winter the Mackenzie freezes so solidly that people drive on ice roads across it.' },
+
+ { topic:'Natural resources', q:'Which natural resources is the Canadian Shield most famous for?',
+   choices:['Wheat and canola','Minerals like gold, nickel and copper','Salmon and seaweed','Oranges and bananas'], a:1,
+   qart:()=>`<div class="scene">${S.minerals(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'shield',alt:'Map with the Canadian Shield highlighted and Sudbury marked',marks:dot('Sudbury','Sudbury (nickel)',{dx:-8,dy:-8,anchor:'end'})}))}${S.minerals()}</div>`,
+   explain:'The Shield\'s ancient rock holds valuable <b>minerals</b>: gold, nickel, copper, iron and more. Mining is a big job there. The Shield also has <b>forests</b> for lumber and paper, and fast rivers that make <b>hydroelectricity</b>.',
+   fun:'Each region has its own resources: <b>Plains</b> wheat and oil, <b>Cordillera</b> lumber and salmon, <b>Lowlands</b> farmland, <b>Appalachian</b> fish.' },
+
+ { topic:'First Peoples & the land', q:'Coast Salish peoples, like the Katzie, Kwantlen and Semiahmoo, have lived where Surrey is for thousands of years. Which tree did they use to build houses and canoes?',
+   choices:['Maple','Palm','Western red cedar','Birch'], a:2,
+   qart:()=>`<div class="scene">${S.cedar(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(0.26,()=>map({focus:'cordillera',vb:[40,420,140,100],alt:'Close-up map of the Lower Mainland of BC with Surrey marked',marks:surrey()}))}${S.cedar()}</div>`,
+   explain:'The rainy Pacific coast grows giant <b>western red cedar</b> trees. Coast Salish peoples used cedar for <b>plank houses</b>, <b>canoes</b>, baskets and even clothing made from soft cedar bark. They fished for <b>salmon</b> in the Fraser River. The land and sea gave them what they needed.',
+   fun:'Cedar is light, strong and doesn\'t rot easily in the rain. That\'s why it\'s perfect for the coast.' },
+
+ { topic:'First Peoples & the land', q:'On the Interior Plains, Nations such as the Blackfoot (Siksikaitsitapi) depended on one big animal for food, clothing and tipi covers. Which animal?',
+   choices:['Bison','Polar bear','Salmon','Moose'], a:0,
+   qart:()=>`<div class="scene">${S.bison(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'plains',alt:'Map with the Interior Plains highlighted',marks:label(D.rl.plains[0],D.rl.plains[1]+40,'Interior Plains',{size:18,anchor:'middle'})}))}${S.bison()}</div>`,
+   explain:'Huge herds of <b>bison</b> once roamed the prairies. Plains peoples used nearly every part: meat for food, hides for clothing and <b>tipi</b> covers, and bones for tools. Tipis could be packed up quickly to follow the herds.',
+   fun:'This shows a big idea in Grade 4: <b>the land and its resources shaped how people lived.</b>' },
+
+ { topic:'Natural resources & European contact', q:'Long ago, European traders paddled the Shield\'s lakes and rivers to trade with First Peoples for one valuable resource. What was it?',
+   choices:['Oil','Beaver fur','Wheat','Gold coins'], a:1,
+   qart:()=>`<div class="scene">${S.beaver(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'shield',alt:'Map with the Canadian Shield highlighted to show the fur trade area',rivers:[{k:'St. Lawrence',w:2.5,color:'#2f7fc0'},{k:'Churchill',w:2.5,color:'#2f7fc0'},{k:'Nelson',w:2.5,color:'#2f7fc0'}],marks:label(520,430,'Fur trade canoe routes',{size:15,anchor:'middle'})}))}${S.beaver()}</div>`,
+   explain:'Europeans wanted <b>beaver fur</b> to make fancy felt hats. They traded metal tools, pots and cloth with First Peoples, who knew the land and the canoe routes. This <b>fur trade</b> changed the land and the lives of the people living on it.',
+   fun:'The Hudson\'s Bay Company started as a fur trading company way back in 1670.' },
+];
+
+/* ---------- render ---------- */
+const letters = 'ABCD';
+const state = {};
+function render(){
+  document.getElementById('refmap').innerHTML = map({regions:true,nums:true,alt:'Study map of Canada coloured by its seven landform regions, numbered 1 to 7, with Surrey marked',marks:surrey('Surrey')});
+  document.getElementById('legend').innerHTML = Object.values(RC).map(r=>`<li><span class="sw" style="background:${r.c}">${r.n}</span><span><b>${r.name}</b>${r.d}</span></li>`).join('');
+  const quiz = document.getElementById('quiz'), key = document.getElementById('key');
+  quiz.innerHTML = Q.map((x,i)=>`
+    <article class="card" id="q${i}" aria-labelledby="qt${i}">
+      <div class="qhead"><span class="qnum">Question ${i+1}</span><span class="topic">${x.topic}</span></div>
+      <p class="qtext" id="qt${i}">${x.q}</p>
+      <figure class="fig${x.qart().startsWith('<div class="scene">')?' scene':''}">${x.qart()}</figure>
+      <ul class="choices" role="list">${x.choices.map((c,j)=>`<li><button class="choice" data-q="${i}" data-c="${j}"><span class="l" aria-hidden="true">${letters[j]}</span><span>${c}</span></button></li>`).join('')}</ul>
+      <div class="reveal"><button class="linkbtn" data-show="${i}">Just show me the answer</button></div>
+      <div class="answer" id="a${i}" hidden aria-live="polite"></div>
+    </article>`).join('');
+  key.innerHTML = Q.map((x,i)=>`<div class="kitem"><p><b>${i+1}. ${letters[x.a]}: ${x.choices[x.a]}</b>. ${x.explain}</p><div class="fig">${x.aart()}</div></div>`).join('');
+}
+function answerHTML(i, picked){
+  const x = Q[i];
+  const v = picked==null ? '' : picked===x.a ? `<div class="verdict ok">✓ Yes, you got it!</div>` : `<div class="verdict no">Not quite. Here's the answer:</div>`;
+  const art = x.aart();
+  const stacked = art.startsWith('<div class="stack">');
+  const inner = stacked ? art.replace(/^<div class="stack">/,'').replace(/<\/div>$/,'') : art;
+  let figs;
+  if (stacked){ const cut = inner.indexOf('</svg>')+6; figs = `<figure class="fig">${inner.slice(0,cut)}</figure><figure class="fig">${inner.slice(cut)}</figure>`; }
+  else figs = `<figure class="fig${art.startsWith('<div class="scene">')?' scene':''}">${art}</figure>`;
+  return `${v}<p class="ans">Answer: ${letters[x.a]}. ${x.choices[x.a]}</p>
+    <div class="agrid${stacked?'':' one'}">${stacked?`<div>${figs.split('</figure>')[0]}</figure></div><div>${figs.split('</figure>')[1]}</figure></div>`:figs}</div>
+    <div class="explain" style="margin-top:12px"><p>${x.explain}</p><div class="fun"><b>Fun fact:</b> ${x.fun}</div></div>`;
+}
+function reveal(i, picked){
+  if (state[i]!==undefined && picked!=null) return;
+  if (picked!=null) state[i]=picked; else if (state[i]===undefined) state[i]=null;
+  const card = document.getElementById('q'+i);
+  card.querySelectorAll('.choice').forEach(b=>{
+    const c=+b.dataset.c; b.disabled=true;
+    if (c===Q[i].a) b.classList.add('right'); else if (c===picked) b.classList.add('wrong');
+  });
+  const a = document.getElementById('a'+i); a.innerHTML = answerHTML(i, picked); a.hidden=false;
+  card.querySelector('.reveal').hidden = true;
+  score();
+}
+function score(){
+  const done = Object.keys(state).length, right = Object.values(state).filter((p,_)=>p!=null).length;
+  let correct=0; for (const [i,p] of Object.entries(state)) if (p===Q[i].a) correct++;
+  document.getElementById('score').innerHTML = `Answered ${done} of ${Q.length} · <span>${correct} correct</span>`;
+}
+render();
+document.addEventListener('click', e=>{
+  const c = e.target.closest('.choice'); if (c && !c.disabled){ reveal(+c.dataset.q, +c.dataset.c); return; }
+  const s = e.target.closest('[data-show]'); if (s){ reveal(+s.dataset.show, null); }
+});
+document.getElementById('showall').onclick = ()=>Q.forEach((_,i)=>{ if(state[i]===undefined) reveal(i,null); });
+document.getElementById('reset').onclick = ()=>{ for (const k in state) delete state[k]; render(); score(); window.scrollTo({top:0,behavior:'smooth'}); };
+document.getElementById('print').onclick = e=>{ const on=document.body.classList.toggle('ws'); e.currentTarget.setAttribute('aria-pressed',on); e.currentTarget.textContent = on?'Back to quiz':'Worksheet view'; if(on) window.scrollTo({top:0}); };
+</script>
+</body>
+</html>

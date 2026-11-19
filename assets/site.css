@@ -1,0 +1,27 @@
+/* Shared styles for the Grade 4 Learning Hub */
+/* Fonts are bundled in assets/fonts (SIL Open Font License) so they work offline. */
+@font-face{font-family:"Andika";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/andika-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Andika";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/andika-latin-700-normal.woff2") format("woff2")}
+@font-face{font-family:"Fredoka";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/fredoka-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"Fredoka";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/fredoka-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"Fredoka";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/fredoka-latin-700-normal.woff2") format("woff2")}
+:root{
+  /* Andika was designed by SIL for beginning readers: clear letter shapes (a, g, l, I, 1) that kids don't mix up.
+     Fredoka is a rounded, friendly display face for headings and buttons. */
+  --body-font:"Andika","Comic Neue",ui-rounded,"SF Pro Rounded",system-ui,sans-serif;
+  --head-font:"Fredoka",ui-rounded,"SF Pro Rounded",system-ui,sans-serif;
+}
+.kicker a{color:inherit;text-decoration:none}
+.kicker a:hover{text-decoration:underline}
+
+.site-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding:12px 20px;background:#1f2a37;color:#fff;font-family:var(--head-font)}
+.site-nav .brand{color:#fff;text-decoration:none;font-weight:700;font-size:20px;margin-right:auto}
+.site-nav .brand span{color:#f7c873;font-weight:500}
+.site-nav ul{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.site-nav a,.site-nav .soon{display:inline-block;padding:6px 14px;border-radius:999px;font-weight:600;font-size:16px;color:#fff;text-decoration:none}
+.site-nav a:hover{background:rgba(255,255,255,.12)}
+.site-nav ul a[aria-current="page"]{background:#f7c873;color:#1f2a37}
+.site-nav .soon{opacity:.55;cursor:default}
+.site-nav .soon small{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-left:2px}
+.site-nav a:focus-visible{outline:3px solid #f7c873;outline-offset:2px}
+@media print{.site-nav{display:none}}

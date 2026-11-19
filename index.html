@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grade 4 Learning Hub</title>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fffdf8;color:#1f2a37;font-family:var(--body-font);font-size:18px;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding:36px 20px 60px}
+h1{font-family:var(--head-font);font-size:clamp(36px,6vw,58px);line-height:1.05;margin:0 0 10px}
+.lead{font-size:20px;color:#5b6675;margin:0 0 30px;max-width:52ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;list-style:none;padding:0;margin:0}
+.subject{display:flex;flex-direction:column;gap:10px;height:100%;border-radius:22px;padding:22px;text-decoration:none;color:#1f2a37;border:3px solid transparent;transition:transform .15s}
+a.subject:hover{transform:translateY(-3px);border-color:#1f2a37}
+a.subject:focus-visible{outline:4px solid #1d4ed8;outline-offset:3px}
+.subject svg{width:72px;height:72px}
+.subject h2{font-family:var(--head-font);font-size:26px;margin:0}
+.subject p{margin:0;font-size:16px}
+.subject .go{margin-top:auto;font-family:var(--head-font);font-weight:600}
+.subject.off{opacity:.6}
+.subject.off .go{color:#5b6675}
+.ss{background:#ffe2c6}.ma{background:#d8ecff}.sc{background:#dcf3df}.la{background:#efe1ff}
+footer{margin-top:40px;color:#5b6675;font-size:14px}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Subjects">
+  <a class="brand" href="./">Grade 4 <span>Learning Hub</span></a>
+  <ul>
+    <li><a href="social-studies/">Social Studies</a></li>
+    <li><span class="soon" aria-disabled="true">Math <small>soon</small></span></li>
+    <li><span class="soon" aria-disabled="true">Science <small>soon</small></span></li>
+    <li><span class="soon" aria-disabled="true">Language Arts <small>soon</small></span></li>
+  </ul>
+</nav>
+<div class="wrap">
+  <h1>Grade 4 Learning Hub</h1>
+  <p class="lead">Pick a subject to practise. Every quiz has pictures and maps to help you learn.</p>
+  <ul class="grid">
+    <li><a class="subject ss" href="social-studies/">
+      <svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="30" fill="#7fc3ea"/><path d="M14,30 q8,-10 18,-6 q6,8 14,2 q8,-6 12,4 q-2,10 -10,12 q-8,10 -18,6 q-10,-2 -16,-18Z" fill="#6fbf73"/><path d="M36,10 v8 M36,54 v8" stroke="#1f2a37" stroke-width="2"/><circle cx="36" cy="36" r="30" fill="none" stroke="#1f2a37" stroke-width="3"/></svg>
+      <h2>Social Studies</h2>
+      <p>Regions of Canada: provinces, landforms, natural resources and First Peoples.</p>
+      <span class="go">Start the quiz →</span></a></li>
+    <li><div class="subject ma off">
+      <svg viewBox="0 0 72 72" aria-hidden="true"><rect x="8" y="8" width="56" height="56" rx="14" fill="#5b9bd5"/><path d="M22,26 h12 M28,20 v12 M40,26 h12 M22,46 l10,-10 M22,36 l10,10 M40,44 h12 M40,40 h12" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+      <h2>Math</h2><p>Coming soon.</p><span class="go">Coming soon</span></div></li>
+    <li><div class="subject sc off">
+      <svg viewBox="0 0 72 72" aria-hidden="true"><path d="M28,8 h16 M31,8 v20 L14,58 q-3,6 4,6 h36 q7,0 4,-6 L41,28 V8" fill="#fff" stroke="#1f2a37" stroke-width="3" stroke-linejoin="round"/><path d="M20,48 h32 l5,10 q2,4 -3,4 H18 q-5,0 -3,-4Z" fill="#6fbf73"/><circle cx="32" cy="40" r="3" fill="#6fbf73"/><circle cx="40" cy="34" r="2" fill="#6fbf73"/></svg>
+      <h2>Science</h2><p>Coming soon.</p><span class="go">Coming soon</span></div></li>
+    <li><div class="subject la off">
+      <svg viewBox="0 0 72 72" aria-hidden="true"><path d="M8,16 q14,-6 28,2 v42 q-14,-8 -28,-2Z" fill="#fff" stroke="#1f2a37" stroke-width="3" stroke-linejoin="round"/><path d="M64,16 q-14,-6 -28,2 v42 q14,-8 28,-2Z" fill="#a88be0" stroke="#1f2a37" stroke-width="3" stroke-linejoin="round"/><path d="M14,26 h14 M14,34 h14 M14,42 h10" stroke="#9aa3ad" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <h2>Language Arts</h2><p>Coming soon.</p><span class="go">Coming soon</span></div></li>
+  </ul>
+  <footer>Made for practising at home, following BC's Grade 4 curriculum.</footer>
+</div>
+</body>
+</html>
