@@ -4,7 +4,7 @@ Illustrated practice quizzes for a Grade 4 student in BC, organised by subject.
 
 | Subject | Page | Status |
 |---|---|---|
-| Social Studies | [`social-studies/`](social-studies/) | Regions of Canada: 21 illustrated questions |
+| Social Studies | [`social-studies/`](social-studies/) | Regions of Canada, two versions: **Full quiz** (21 questions) and **Landforms only** (19 questions, at `social-studies/#landforms`) |
 | Math | — | Coming soon |
 | Science | — | Coming soon |
 | Language Arts | — | Coming soon |
@@ -27,7 +27,8 @@ index.html              Home page and subject menu
 assets/site.css         Shared fonts and the subject nav
 assets/fonts/           Andika (body) and Fredoka (headings), bundled under the SIL OFL
 social-studies/
-  index.html            Regions of Canada quiz (tap answers, worksheet view for printing)
+  index.html            Regions of Canada quiz with a version picker: Full quiz (Q_FULL) or
+                        Landforms only (LQ). Tap answers; worksheet view for printing
   mapdata.js            Pre-projected Canada map geometry
 tools/build-map.mjs     Script that generated mapdata.js
 ```

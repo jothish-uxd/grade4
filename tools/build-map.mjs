@@ -78,6 +78,7 @@ const cities = {
   Fredericton: [-66.64, 45.96], Halifax: [-63.57, 44.65], Charlottetown: [-63.13, 46.24], "St. John's": [-52.71, 47.56],
   Whitehorse: [-135.06, 60.72], Yellowknife: [-114.37, 62.45], Iqaluit: [-68.52, 63.75], "Mount Logan": [-140.4, 60.57],
   Calgary: [-114.07, 51.05], Vancouver: [-123.12, 49.28], Sudbury: [-81.0, 46.49], Churchill: [-94.17, 58.77],
+  "Baffin Island": [-71, 68.8], "Great Bear Lake": [-121, 66], "Great Slave Lake": [-114.5, 61.6],
   // label anchors
   "Pacific Ocean": [-136, 49], "Arctic Ocean": [-128, 76], "Atlantic Ocean": [-55, 43], "Hudson Bay": [-86, 59.5],
 };
@@ -87,6 +88,7 @@ const lab = { BC: [-125, 54], AB: [-115, 55], SK: [-106, 54], MB: [-98, 55], ON:
 out.lab = {};
 for (const [k, v] of Object.entries(lab)) out.lab[k] = proj(v).map((x) => +x.toFixed(1));
 
+out.rockies = [[-114.2, 49.3], [-115.6, 51], [-117.4, 52.6], [-119.4, 54], [-121.4, 55.6], [-123.2, 57.4], [-124.8, 59.3]].map((p) => proj(p).map((x) => +x.toFixed(1)));
 const rl = { cordillera: [-128, 57.5], plains: [-112, 56.5], shield: [-74, 53.5], hbl: [-87, 54.2], lowlands: [-80.6, 43.5], appalachian: [-66.3, 47.3], arctic: [-104, 75.5] };
 out.rl = {};
 for (const [k, v] of Object.entries(rl)) out.rl[k] = proj(v).map((x) => +x.toFixed(1));

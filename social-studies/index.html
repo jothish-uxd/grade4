@@ -68,6 +68,15 @@ svg.map{width:100%;height:auto;display:block;border-radius:14px}
 .fun{background:#eef6ff;border-radius:12px;padding:10px 14px;font-size:16px}
 .fun b{color:#1d4ed8}
 .key{display:none}
+.versions{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:4px 0 0}
+.vlabel{grid-column:1/-1;font-family:var(--head-font);font-weight:600;font-size:19px}
+.vbtn{text-align:left;border:3px solid #cfc7b8;background:#fff;border-radius:18px;padding:12px 16px;display:grid;gap:2px;color:var(--ink)}
+.vbtn:hover{border-color:var(--ink)}
+.vbtn b{font-family:var(--head-font);font-size:21px;font-weight:600}
+.vbtn small{font-size:15px;color:var(--muted)}
+.vbtn[aria-pressed="true"]{border-color:var(--ink);background:#fff6e5;box-shadow:0 4px 0 var(--ink)}
+.vbtn[aria-pressed="true"] b::before{content:"✓ ";color:var(--ok)}
+body.ws .versions{display:none}
 body.ws .reveal,body.ws .answer{display:none!important}
 body.ws .key{display:block;margin-top:30px;border-top:3px dashed var(--line);padding-top:20px}
 body.ws .choice{pointer-events:none}
@@ -78,7 +87,7 @@ footer a{color:inherit}
 @media (max-width:700px){.agrid{grid-template-columns:1fr}.qtext{font-size:20px}body{font-size:17px}}
 @media print{
   body{font-size:13px} .wrap{padding:0;max-width:none}
-  .toolbar,.reveal,.answer{display:none!important}
+  .toolbar,.reveal,.answer,.versions{display:none!important}
   .card,section.ref{border:1px solid #bbb;border-radius:10px;padding:12px;margin-bottom:12px}
   .qtext{font-size:16px}
   .fig{max-width:420px}
@@ -104,13 +113,19 @@ footer a{color:inherit}
 <div class="wrap">
   <header class="hero">
     <div class="kicker"><a href="../">Home</a> › Social Studies</div>
-    <h1>Regions of Canada: Quiz &amp; Picture Guide</h1>
-    <p class="sub">21 practice questions about Canada's provinces, its seven landform regions, its natural resources, and how the land shaped the lives of First Peoples. Every question has a picture, and every answer has a map or picture that explains it.</p>
-    <div class="parent"><strong>For grown-ups</strong>BC's Grade 4 Social Studies course is called <em>First Peoples and European Contact</em>. One of its topics is the <em>landforms and natural resources of Canada</em>, and a big idea is that the search for valuable resources changed the land and its communities. The questions below cover that topic. Teachers sometimes use slightly different names or numbers of regions, so check your child's class notes and use their teacher's names. Tap an answer to check it. To print, tap <b>Worksheet view</b> to hide the answers and add an answer key at the end, then press ⌘P.</div>
+    <h1 id="title">Regions of Canada: Quiz &amp; Picture Guide</h1>
+    <p class="sub" id="sub"></p>
+    <div class="parent"><strong>For grown-ups</strong>BC's Grade 4 Social Studies course is called <em>First Peoples and European Contact</em>. One of its topics is the <em>landforms and natural resources of Canada</em>, and a big idea is that the search for valuable resources changed the land and its communities. The questions below cover that topic. Pick a version: the <b>Full quiz</b> also covers provinces, territories, capital cities, resources and First Peoples, and <b>Landforms only</b> sticks to the land itself, with no place names to memorize. Teachers sometimes use slightly different names or numbers of regions, so check your child's class notes and use their teacher's names. Tap an answer to check it. To print, tap <b>Worksheet view</b> to hide the answers and add an answer key at the end, then press ⌘P.</div>
   </header>
 
+  <div class="versions" role="group" aria-label="Choose a quiz version">
+    <span class="vlabel">Choose a quiz:</span>
+    <button class="vbtn" data-v="full" aria-pressed="true"><b>Full quiz</b><small>Provinces, cities, landform regions, resources and First Peoples · <span class="vcount"></span></small></button>
+    <button class="vbtn" data-v="landforms" aria-pressed="false"><b>Landforms only</b><small>Just the land: mountains, plains, valleys and the 7 regions · <span class="vcount"></span></small></button>
+  </div>
+
   <div class="toolbar" role="region" aria-label="Quiz controls">
-    <div class="score" aria-live="polite" id="score">Answered 0 of 21</div>
+    <div class="score" aria-live="polite" id="score"></div>
     <button class="btn" id="showall">Show all answers</button>
     <button class="btn" id="reset">Start over</button>
     <button class="btn primary" id="print" aria-pressed="false">Worksheet view</button>
@@ -118,7 +133,7 @@ footer a{color:inherit}
 
   <section class="ref" aria-labelledby="refh">
     <h2 id="refh">Study map: Canada's 7 landform regions</h2>
-    <p class="sub">A <b>region</b> is an area where the land, weather, plants and animals are alike. Find the dot for Surrey. That's where you live!</p>
+    <p class="sub" id="refsub"></p>
     <div id="refmap"></div>
     <ul class="legend" id="legend"></ul>
   </section>
@@ -314,7 +329,7 @@ const S = {
     <path d="M150,72 L175,30 L200,76 L188,68 L178,80 L166,66Z" fill="#fff"/>
     <path d="M175,30 v-20" stroke="#1f2a37" stroke-width="2"/><path d="M175,10 l16,5 l-16,5Z" fill="#d52b1e"/>
     <path d="M0,200 L40,170 L80,200Z" fill="#fff" opacity=".7"/>
-    ${q?qmark(60,60,38):tag(250,40,'5,959 m tall')+tag(175,196,'Mount Logan, Yukon')}`,
+    ${q?qmark(60,60,38):tag(250,40,'5,959 m tall')+tag(175,196,'Mount Logan')}`,
     'A very tall snowy mountain with a small flag on its peak'); },
 
   cedar(q){ return SV(`${sky()}
@@ -349,6 +364,51 @@ const S = {
     ${q?'':tag(78,128,'Beaver')+tag(230,152,'Furs for trading')}`,
     'A canoe loaded with a bundle of furs paddling on a lake surrounded by forest'); },
 
+  landforms(o={}){ const {focus,q}=o;
+    const A={mountain:[100,26],valley:[62,124],plateau:[183,82],plain:[274,142],lake:[288,176],river:[150,183]};
+    const L={mountain:[100,18],valley:[62,120],plateau:[183,76],plain:[274,136],lake:[292,197],river:[118,197]};
+    const N={mountain:'Mountain',valley:'Valley',plateau:'Plateau',plain:'Plain',lake:'Lake',river:'River'};
+    let s = sky() + `<rect y="155" width="320" height="45" fill="#7cb36b"/>
+    <rect x="224" y="150" width="96" height="50" fill="#a9cf6f"/>
+    <g stroke="#7fae4f" stroke-width="1.5">${[236,252,268,300,312].map(x=>`<path d="M${x},162 l2,-6 l2,6"/>`).join('')}</g>
+    <path d="M0,160 L25,48 L62,140 L100,28 L140,160Z" fill="#8c7b6b"/>
+    <path d="M17,78 L25,48 L33,76 L26,70Z" fill="#fff"/><path d="M90,56 L100,28 L111,58 L101,50Z" fill="#fff"/>
+    <path d="M44,160 L62,136 L82,160Z" fill="#6aa35c"/>
+    <path d="M140,160 L154,86 L212,86 L226,160Z" fill="#b98b5e"/><path d="M154,86 H212" stroke="#8a6440" stroke-width="3"/>
+    <path d="M150,110 H218 M146,132 H222" stroke="#a37a52" stroke-width="2"/>
+    <path d="M62,140 C62,160 90,176 150,180 S240,182 262,177" stroke="#5aa6d6" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="288" cy="176" rx="28" ry="8" fill="#5aa6d6"/>`;
+    if (q && !focus) return SV(s + qmark(200,40,40), 'A landscape picture with mountains, a valley, a river, a high flat plateau, a flat plain and a lake');
+    if (q) { const [x,y]=A[focus]; return SV(s + `<circle cx="${x}" cy="${y}" r="24" fill="none" stroke="#c8553d" stroke-width="3" stroke-dasharray="6 4"/>` + qmark(x, y-2, 26), 'A landscape picture with one landform circled and marked with a question mark'); }
+    for (const k in N){ const [x,y]=L[k]; s += k===focus ? `<circle cx="${A[k][0]}" cy="${A[k][1]}" r="24" fill="none" stroke="#c8553d" stroke-width="3" stroke-dasharray="6 4"/>` + Z(1,()=>label(A[k][0],Math.max(16,A[k][1]-30),N[k],{size:17,anchor:'middle',fill:'#c8553d'})) : tag(x,y,N[k]); }
+    return SV(s, 'A landscape picture labelled with a mountain, valley, river, plateau, plain and lake'); },
+
+  glacier(q){ return SV(`
+    <rect width="320" height="200" fill="#fff"/>
+    <g><rect x="6" y="22" width="150" height="150" rx="10" fill="#cfe3f2"/>
+      <path d="M6,132 H156 V172 H6Z" fill="#8f8780"/>
+      <path d="M6,60 Q40,48 80,56 T156,52 V132 H6Z" fill="#f4fbff" stroke="#9cc3dd" stroke-width="2"/>
+      <path d="M24,96 h40 m-8,-6 l8,6 l-8,6 M84,108 h40 m-8,-6 l8,6 l-8,6" stroke="#5a8fb5" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M40,132 q14,10 28,0 M100,132 q16,12 32,0" stroke="#6f6760" stroke-width="2" fill="none"/>
+      ${q?`<rect x="6" y="22" width="150" height="150" rx="10" fill="#e9e5dc"/>`+qmark(81,96,40):''}</g>
+    <g><rect x="164" y="22" width="150" height="150" rx="10" fill="#cfe8fb"/>
+      <path d="M164,120 H314 V172 H164Z" fill="#8f8780"/>
+      <ellipse cx="200" cy="134" rx="22" ry="7" fill="#5aa6d6"/><ellipse cx="262" cy="146" rx="30" ry="8" fill="#5aa6d6"/><ellipse cx="294" cy="128" rx="12" ry="5" fill="#5aa6d6"/>
+      ${[176,232,300].map(x=>tree(x,122,26,'#2c5e3f')).join('')}</g>
+    ${q?tag(81,190,'Long ago: ?')+tag(239,190,'Today: lakes'):tag(81,190,'Long ago: a giant glacier')+tag(239,190,'Today: lakes')+tag(81,46,'Ice scrapes the rock')}`,
+    'Two pictures: long ago a thick sheet of ice moved over the rock, and today the scraped holes are full of lakes'); },
+
+  compare(q){ return SV(`${sky()}
+    <path d="M0,170 L30,70 L52,110 L80,30 L106,100 L124,60 L156,170Z" fill="#7d6e62"/>
+    <path d="M70,58 L80,30 L90,60 L81,52Z" fill="#fff"/><path d="M24,90 L30,70 L37,88Z" fill="#fff"/><path d="M118,78 L124,60 L131,80Z" fill="#fff"/>
+    <path d="M164,170 Q190,108 222,130 Q250,96 282,128 Q302,112 320,140 V170Z" fill="#7d9b6a"/>
+    ${[190,232,270,300].map(x=>tree(x,150,20,'#3f6e4b')).join('')}
+    <rect y="168" width="320" height="32" fill="#6b9b5e"/>
+    <path d="M160,30 V170" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/>
+    ${tag(78,190,'Cordillera')+tag(242,190,'Appalachian')}
+    ${q?qmark(242,62,36):tag(78,20,'Young and pointy')+tag(242,82,'Old and worn down')+`<g fill="#5aa6d6">${[200,216,250,266,290].map((x,i)=>`<path d="M${x},${40+i%2*10} q-4,8 0,10 q4,-2 0,-10Z"/>`).join('')}</g>`}`,
+    'Two kinds of mountains side by side: tall, pointy snowy peaks on the left and low, rounded green hills on the right'); },
+
   minerals(q){ return SV(`
     <rect width="320" height="200" fill="#f3efe6"/>
     <path d="M20,170 Q60,110 120,140 Q170,100 230,138 Q270,120 300,170Z" fill="#8f8780"/>
@@ -361,7 +421,7 @@ const S = {
 };
 
 /* ---------- questions ---------- */
-const Q = [
+const Q_FULL = [
  { topic:'Provinces & territories', q:'Canada is divided into provinces and territories. How many of each are there?',
    choices:['10 provinces and 3 territories','13 provinces and no territories','9 provinces and 4 territories','3 provinces and 10 territories'], a:0,
    qart:()=>map({base:'#f6f1e7',alt:'Outline map of Canada showing its 13 parts',marks:Object.entries(D.lab).map(([k,[x,y]])=>`<text x="${x}" y="${y+5}" text-anchor="middle" font-size="16" font-weight="900" fill="#c8553d">?</text>`).join('')}),
@@ -512,12 +572,177 @@ const Q = [
    fun:'The Hudson\'s Bay Company started as a fur trading company way back in 1670.' },
 ];
 
+/* ---------- Landforms-only version: no province, territory or city names ---------- */
+const mtn = (x,y,s=9) => { s*=SCALE; return `<path d="M${x-s},${y+s*0.6} L${x},${y-s} L${x+s},${y+s*0.6}Z" fill="#5d4b3c" stroke="#fff" stroke-width="${1.2*SCALE}" stroke-linejoin="round"/>`; };
+const LQ = [
+ { topic:'Landform basics', q:'What is a landform?',
+   choices:['A natural shape of the land, like a mountain, valley or plain','A building made by people','A kind of weather','A line drawn on a map'], a:0,
+   qart:()=>`<div class="scene">${S.landforms({q:true})}</div>`,
+   aart:()=>`<div class="scene">${S.landforms()}</div>`,
+   explain:'A <b>landform</b> is a natural shape on Earth\'s surface. Mountains, hills, valleys, plains, plateaus and islands are all landforms. They formed over a very long time, shaped by moving rock, glaciers, wind and water.',
+   fun:'Canada has almost every kind of landform, from tall mountains to huge flat plains and thousands of islands.' },
+
+ { topic:'Landform basics', q:'Which landform is a large area of flat land?',
+   choices:['Mountain','Valley','Plain','Island'], a:2,
+   qart:()=>`<div class="scene">${S.landforms({focus:'plain',q:true})}</div>`,
+   aart:()=>`<div class="scene">${S.landforms({focus:'plain'})}</div>`,
+   explain:'A <b>plain</b> is a big area of flat or gently rolling land. Plains are good for farming because the land is flat and the soil is often rich.',
+   fun:'Some plains are so flat that you can watch a storm coming from far away!' },
+
+ { topic:'Landform basics', q:'What is a plateau?',
+   choices:['A deep hole in the ground','High land with a flat top','A river that flows into the sea','A pointy mountain peak'], a:1,
+   qart:()=>`<div class="scene">${S.landforms({focus:'plateau',q:true})}</div>`,
+   aart:()=>`<div class="scene">${S.landforms({focus:'plateau'})}</div>`,
+   explain:'A <b>plateau</b> (say: pla-TOE) is high, flat land with steep sides. It\'s like a giant table made of land. The Cordillera has big plateaus between its mountain ranges.',
+   fun:'"Plateau" comes from a French word that means a flat tray.' },
+
+ { topic:'Landform basics', q:'What is a valley?',
+   choices:['Low land between hills or mountains, often with a river','The very top of a mountain','Land with water all around it','A big flat sheet of ice'], a:0,
+   qart:()=>`<div class="scene">${S.landforms({focus:'valley',q:true})}</div>`,
+   aart:()=>`<div class="scene">${S.landforms({focus:'valley'})}</div>`,
+   explain:'A <b>valley</b> is low land between hills or mountains. Many valleys have a river flowing through them, and the river slowly carves the valley deeper.',
+   fun:'Valleys carved by glaciers are shaped like a U. Valleys carved by rivers are shaped like a V.' },
+
+ { topic:'Landform regions', q:'What is a geographic "region"?',
+   choices:['A big city','An area where the land, climate, plants and animals are alike','A kind of mountain','A kind of map'], a:1,
+   qart:()=>`<div class="scene">${S.tiles()}</div>`,
+   aart:()=>map({regions:true,nums:true,alt:'Map of Canada coloured by its seven landform regions, numbered 1 to 7'}),
+   explain:'A <b>region</b> is an area where the land has things in common, like its landforms, weather, plants and animals. Canada is often split into <b>7 landform regions</b>, and each one looks different from the regions beside it.',
+   fun:'Some books split Canada into a few more or fewer regions, but most Grade 4 classes learn 7.' },
+
+ { topic:'Landform regions', q:'Look at the numbered map. Which region is number 1, along the Pacific Ocean?',
+   choices:['Interior Plains','Canadian Shield','Cordillera','Appalachian'], a:2,
+   qart:()=>map({regions:true,nums:true,alt:'Numbered map of the seven landform regions'}),
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'cordillera',alt:'Map with the Cordillera highlighted along the west coast',marks:label(105,320,'Cordillera',{size:18,anchor:'middle'})}))}${S.cordillera()}</div>`,
+   explain:'The <b>Cordillera</b> (say: cor-dee-YAIR-a) has tall, young mountain ranges, deep valleys and high plateaus along the Pacific Ocean. The Coast Mountains and the Rocky Mountains are both part of it.',
+   fun:'The Cordillera\'s mountains are still being pushed up very slowly, a tiny bit each year.' },
+
+ { topic:'Landform regions', q:'Which mountain range forms the eastern edge of the Cordillera, right next to the Interior Plains?',
+   choices:['Appalachian Mountains','Rocky Mountains','Laurentian Mountains','Himalayas'], a:1,
+   qart:()=>map({regions:true,alt:'Map of the landform regions with a question mark where the Cordillera meets the Interior Plains',marks:(()=>{const [x,y]=D.rockies[3];return badge(x,y,'?',{fill:'#c8553d',r:15,size:18});})()}),
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'cordillera',alt:'Map with mountain symbols along the eastern edge of the Cordillera showing the Rocky Mountains',marks:D.rockies.map(([x,y])=>mtn(x,y)).join('')+label(D.rockies[2][0]+14,D.rockies[2][1],'Rocky Mountains',{size:16})}))}${S.cordillera()}</div>`,
+   explain:'The <b>Rocky Mountains</b> run along the eastern side of the Cordillera. On one side are tall, snowy peaks. On the other side, the land suddenly flattens out into the Interior Plains.',
+   fun:'The Rockies are thousands of kilometres long. They stretch from Canada all the way down through the United States.' },
+
+ { topic:'Landform regions', q:'Which is the BIGGEST region? It wraps around Hudson Bay like a giant horseshoe, and has very old rock and thousands of lakes.',
+   choices:['Canadian Shield','Hudson Bay Lowlands','Arctic','Interior Plains'], a:0,
+   qart:()=>`<div class="scene">${S.shield(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'shield',alt:'Map with the Canadian Shield highlighted, curving around Hudson Bay',marks:label(D.rl.shield[0],D.rl.shield[1],'Canadian Shield',{size:16,anchor:'middle'})+label(D.pts['Hudson Bay'][0],D.pts['Hudson Bay'][1],'Hudson Bay',{size:11,anchor:'middle',fill:'#1f5f99'})}))}${S.shield()}</div>`,
+   explain:'The <b>Canadian Shield</b> covers about half of Canada. It\'s made of some of the oldest rock on Earth. The land is rocky and fairly low, with rounded hills, forests, and thousands of lakes and rivers.',
+   fun:'Some rocks in the Shield are about 4 billion years old!' },
+
+ { topic:'How landforms are made', q:'How did the Canadian Shield get its thousands of lakes?',
+   choices:['Giant glaciers scraped the rock, and the holes filled with water','People dug them','It rained for one whole year','Volcanoes made them'], a:0,
+   qart:()=>`<div class="scene">${S.glacier(true)}</div>`,
+   aart:()=>`<div class="scene">${S.glacier()}</div>`,
+   explain:'During the <b>Ice Age</b>, thick sheets of ice called <b>glaciers</b> covered almost all of Canada. As they slowly moved, they scraped away soil and dug out holes in the rock. When the ice melted, water filled the holes and made lakes.',
+   fun:'Some of those glaciers were about 3 km thick. That\'s taller than many mountains!' },
+
+ { topic:'Landform regions', q:'Which region is flat, with big skies and huge wheat farms, between the Rocky Mountains and the Canadian Shield?',
+   choices:['Cordillera','Appalachian','Interior Plains','Arctic'], a:2,
+   qart:()=>`<div class="scene">${S.plains(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'plains',alt:'Map with the Interior Plains highlighted between the Cordillera and the Canadian Shield',marks:label(D.rl.plains[0],D.rl.plains[1]+40,'Interior Plains',{size:16,anchor:'middle'})}))}${S.plains()}</div>`,
+   explain:'The <b>Interior Plains</b> are flat or gently rolling land in the middle of Canada, between the Rocky Mountains and the Canadian Shield. The soil is rich, so much of the land is farms and grassland.',
+   fun:'The tall buildings beside the railways on the plains are grain elevators. They store wheat until a train carries it away.' },
+
+ { topic:'Landform regions', q:'Which region is low, flat land with rich soil along the Great Lakes and the St. Lawrence River?',
+   choices:['Great Lakes–St. Lawrence Lowlands','Hudson Bay Lowlands','Canadian Shield','Cordillera'], a:0,
+   qart:()=>`<div class="scene">${S.lowlands(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(0.62,()=>map({focus:'lowlands',vb:[400,420,330,240],alt:'Close-up map with the Great Lakes–St. Lawrence Lowlands highlighted along the Great Lakes and the St. Lawrence River',rivers:[{k:'St. Lawrence',color:'#2f7fc0',w:2}],marks:label(470,640,'Great Lakes',{size:13,anchor:'middle',fill:'#1f5f99'})+label(660,470,'St. Lawrence River',{size:13,anchor:'middle',fill:'#1f5f99'})}))}${S.lowlands()}</div>`,
+   explain:'The <b>Great Lakes–St. Lawrence Lowlands</b> is the smallest region. Its land is low and mostly flat, with a mild climate. Glaciers and ancient seas left behind deep, rich soil that\'s great for farming.',
+   fun:'Even though it\'s the smallest region, about half of all Canadians live there.' },
+
+ { topic:'Landform regions', q:'Which region has old, rounded mountains and rocky coasts on the Atlantic Ocean?',
+   choices:['Arctic','Appalachian','Interior Plains','Cordillera'], a:1,
+   qart:()=>`<div class="scene">${S.appalachian(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(0.45,()=>map({focus:'appalachian',vb:[560,360,240,220],alt:'Close-up map with the Appalachian region highlighted in the southeast',marks:label(650,560,'Appalachian',{size:16,anchor:'middle'})+label(760,520,'Atlantic Ocean',{size:13,anchor:'middle',fill:'#1f5f99'})}))}${S.appalachian()}</div>`,
+   explain:'The <b>Appalachian</b> region is in the southeast. Its mountains are very old, and wind, rain and ice have worn them down into low, rounded hills. It also has rocky coastlines and many islands.',
+   fun:'The Appalachian Mountains are so old that they formed before the dinosaurs lived!' },
+
+ { topic:'How landforms are made', q:'The Cordillera and the Appalachian region both have mountains. Why are the Appalachian mountains lower and rounder?',
+   choices:['They are much older and have been worn down','They are made of sand','They are still growing','They are under the ocean'], a:0,
+   qart:()=>`<div class="scene">${S.compare(true)}</div>`,
+   aart:()=>`<div class="scene">${S.compare()}</div>`,
+   explain:'The <b>Appalachian</b> mountains are hundreds of millions of years old. Over all that time, wind, rain, rivers and glaciers wore them down. The <b>Cordillera</b> mountains are much younger, so they\'re still tall, sharp and pointy.',
+   fun:'This slow wearing away of rock is called <b>erosion</b>.' },
+
+ { topic:'Landform regions', q:'Which region is flat, wet and swampy, with land called "muskeg," south of Hudson Bay?',
+   choices:['Interior Plains','Hudson Bay Lowlands','Appalachian','Great Lakes–St. Lawrence Lowlands'], a:1,
+   qart:()=>`<div class="scene">${S.hbl(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'hbl',alt:'Map with the Hudson Bay Lowlands highlighted along the south shore of Hudson Bay',marks:label(D.rl.hbl[0]-10,D.rl.hbl[1]+34,'Hudson Bay Lowlands',{size:14,anchor:'middle'})}))}${S.hbl()}</div>`,
+   explain:'The <b>Hudson Bay Lowlands</b> are so low and flat that water can\'t drain away, so the land stays soggy. The wet, spongy ground is called <b>muskeg</b>. It\'s one of the biggest wetlands in the world.',
+   fun:'This land was under the sea not long ago (in Earth time). Now that the heavy glaciers are gone, it\'s still rising, very slowly.' },
+
+ { topic:'Landform regions', q:'Which region is the coldest, with no trees, frozen ground and islands in the far north?',
+   choices:['Hudson Bay Lowlands','Canadian Shield','Arctic','Cordillera'], a:2,
+   qart:()=>`<div class="scene">${S.arctic(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'arctic',alt:'Map with the Arctic region highlighted on the northern islands',marks:label(D.rl.arctic[0],D.rl.arctic[1]+30,'Arctic',{size:16,anchor:'middle'})}))}${S.arctic()}</div>`,
+   explain:'The <b>Arctic</b> region is made up of islands in the far north. It\'s so cold that trees can\'t grow, so the land is <b>tundra</b>, with mosses, lichens and tiny flowers. In the very far north there are icy mountains and glaciers too.',
+   fun:'In the Arctic summer, the sun doesn\'t set for weeks. It\'s called the "midnight sun."' },
+
+ { topic:'Landform regions', q:'In the Arctic, what is "permafrost"?',
+   choices:['A big snowstorm','Ice floating on the ocean','Ground that stays frozen all year','A kind of Arctic plant'], a:2,
+   qart:()=>`<div class="scene">${S.permafrost(true)}</div>`,
+   aart:()=>`<div class="scene">${S.permafrost()}</div>`,
+   explain:'<b>Permafrost</b> is ground that stays frozen all year round. Only a thin top layer thaws in summer. Tree roots can\'t grow down into it, which is one reason the tundra has no trees.',
+   fun:'When permafrost melts, the ground can sink and tilt anything built on top of it.' },
+
+ { topic:'Mountains, rivers & islands', q:'What is the tallest mountain in Canada?',
+   choices:['Mount Robson','Mount Logan','Whistler Mountain','Mount Everest'], a:1,
+   qart:()=>`<div class="scene">${S.peak(true)}</div>`,
+   aart:()=>`<div class="stack">${Z(1.5,()=>map({focus:'cordillera',alt:'Map with a star on Mount Logan in the far northwest corner of Canada',marks:(()=>{const [x,y]=P('Mount Logan');return star(x,y,11)+label(x+14,y+5,'Mount Logan',{size:15});})()}))}${S.peak()}</div>`,
+   explain:'Canada\'s tallest mountain is <b>Mount Logan</b>, about <b>5,959 m</b> tall. It\'s in the Cordillera, in the far northwest corner of Canada. Mount Robson is the tallest in the Canadian Rockies. Mount Everest is the tallest in the world, but it\'s in Asia.',
+   fun:'Mount Logan is so wide at its base that it may be the most massive mountain on Earth.' },
+
+ { topic:'Mountains, rivers & islands', q:'Which is the longest river in Canada? Each river on the map has a letter that matches a choice.',
+   choices:['Fraser River','Mackenzie River','St. Lawrence River','Yukon River'], a:1,
+   qart:()=>map({alt:'Map of Canada with four rivers drawn in blue and labelled A to D',rivers:[{k:'Fraser',w:3},{k:'Mackenzie',w:3},{k:'St. Lawrence',w:3},{k:'Yukon',w:3}],marks:badge(80,430,'A',{r:11,size:13})+badge(190,230,'B',{r:11,size:13})+badge(625,505,'C',{r:11,size:13})+badge(50,225,'D',{r:11,size:13})}),
+   aart:()=>map({regions:true,alt:'Landform map with the Mackenzie River highlighted, flowing north through the Interior Plains to the Arctic Ocean',rivers:[{k:'Mackenzie',color:'#1f5f99',w:4}],marks:label(150,250,'Mackenzie River',{size:17,anchor:'end'})+label(220,140,'→ to the Arctic Ocean',{size:13,anchor:'middle'})}),
+   explain:'The <b>Mackenzie River</b> is Canada\'s longest river. Together with the rivers that flow into it, it\'s over 4,000 km long! It starts at Great Slave Lake and flows <b>north</b> through the Interior Plains into the Arctic Ocean.',
+   fun:'In winter the Mackenzie freezes so solidly that people drive on ice roads across it.' },
+
+ { topic:'Mountains, rivers & islands', q:'What is Canada\'s biggest island?',
+   choices:['Vancouver Island','Baffin Island','Victoria Island','Ellesmere Island'], a:1,
+   qart:()=>map({alt:'Map of Canada with a question mark on a large island in the northeast',marks:(()=>{const [x,y]=P('Baffin Island');return badge(x,y,'?',{fill:'#c8553d',r:15,size:18});})()}),
+   aart:()=>map({regions:true,alt:'Landform map with a star on Baffin Island in the northeast',marks:(()=>{const [x,y]=P('Baffin Island');return star(x,y,12)+label(x+16,y+6,'Baffin Island',{size:18});})()}),
+   explain:'<b>Baffin Island</b>, in the far northeast, is Canada\'s biggest island and the fifth-biggest island in the world. It has mountains, glaciers and fjords. A <b>fjord</b> (say: fee-YORD) is a long, narrow arm of the sea carved by a glacier.',
+   fun:'Baffin Island is bigger than many countries, including the whole United Kingdom.' },
+];
+
+const LEGEND_LAND = {
+  cordillera:'Young, tall mountains, deep valleys and high plateaus along the Pacific coast.',
+  plains:'Flat or gently rolling land in the middle of Canada.',
+  shield:'The biggest region. Very old, hard rock scraped by glaciers, with thousands of lakes.',
+  hbl:'Flat, wet, swampy land (muskeg) beside Hudson Bay.',
+  lowlands:'The smallest region. Low, flat land with rich soil along the Great Lakes and the St. Lawrence River.',
+  appalachian:'Old mountains worn down into rounded hills, with rocky coasts.',
+  arctic:'Cold, treeless tundra and frozen ground on the northern islands.'
+};
+const VERSIONS = {
+  full:{ title:'Regions of Canada: Quiz &amp; Picture Guide', qs:Q_FULL, land:false,
+    sub:n=>`${n} practice questions about Canada's provinces, its seven landform regions, its natural resources, and how the land shaped the lives of First Peoples. Every question has a picture, and every answer has a map or picture that explains it.`,
+    refsub:'A <b>region</b> is an area where the land, weather, plants and animals are alike. Find the dot for Surrey. That\'s where you live!' },
+  landforms:{ title:'Canada\'s Landforms: Quiz &amp; Picture Guide', qs:LQ, land:true,
+    sub:n=>`${n} practice questions about the land itself: mountains, plains, plateaus and valleys, Canada's seven landform regions, and how glaciers and erosion shaped them. No province, territory or city names to remember!`,
+    refsub:'A <b>region</b> is an area where the land, weather, plants and animals are alike. Each colour on this map is a different landform region.' }
+};
+let V = location.hash === '#landforms' ? 'landforms' : 'full';
+let Q = VERSIONS[V].qs;
+
 /* ---------- render ---------- */
 const letters = 'ABCD';
 const state = {};
 function render(){
-  document.getElementById('refmap').innerHTML = map({regions:true,nums:true,alt:'Study map of Canada coloured by its seven landform regions, numbered 1 to 7, with Surrey marked',marks:surrey('Surrey')});
-  document.getElementById('legend').innerHTML = Object.values(RC).map(r=>`<li><span class="sw" style="background:${r.c}">${r.n}</span><span><b>${r.name}</b>${r.d}</span></li>`).join('');
+  const ver = VERSIONS[V];
+  document.getElementById('title').innerHTML = ver.title;
+  document.title = ver.title.replace('&amp;','&').split(':')[0] + ' · Social Studies · Grade 4';
+  document.getElementById('sub').innerHTML = ver.sub(Q.length);
+  document.getElementById('refsub').innerHTML = ver.refsub;
+  document.querySelectorAll('.vbtn').forEach(b=>{ b.setAttribute('aria-pressed', b.dataset.v===V); b.querySelector('.vcount').textContent = VERSIONS[b.dataset.v].qs.length + ' questions'; });
+  document.getElementById('refmap').innerHTML = ver.land
+    ? map({regions:true,nums:true,alt:'Study map of Canada coloured by its seven landform regions, numbered 1 to 7'})
+    : map({regions:true,nums:true,alt:'Study map of Canada coloured by its seven landform regions, numbered 1 to 7, with Surrey marked',marks:surrey('Surrey')});
+  document.getElementById('legend').innerHTML = Object.entries(RC).map(([k,r])=>`<li><span class="sw" style="background:${r.c}">${r.n}</span><span><b>${r.name}</b>${ver.land?LEGEND_LAND[k]:r.d}</span></li>`).join('');
   const quiz = document.getElementById('quiz'), key = document.getElementById('key');
   quiz.innerHTML = Q.map((x,i)=>`
     <article class="card" id="q${i}" aria-labelledby="qt${i}">
@@ -560,8 +785,17 @@ function score(){
   let correct=0; for (const [i,p] of Object.entries(state)) if (p===Q[i].a) correct++;
   document.getElementById('score').innerHTML = `Answered ${done} of ${Q.length} · <span>${correct} correct</span>`;
 }
-render();
+function setVersion(v){
+  if (!VERSIONS[v]) v='full';
+  V = v; Q = VERSIONS[v].qs;
+  for (const k in state) delete state[k];
+  render(); score();
+  try { history.replaceState(null, '', v==='landforms' ? '#landforms' : location.pathname); } catch(e) {}
+}
+render(); score();
+window.addEventListener('hashchange', ()=>{ const v = location.hash==='#landforms'?'landforms':'full'; if (v!==V) setVersion(v); });
 document.addEventListener('click', e=>{
+  const vb = e.target.closest('.vbtn'); if (vb){ if (vb.dataset.v!==V) setVersion(vb.dataset.v); return; }
   const c = e.target.closest('.choice'); if (c && !c.disabled){ reveal(+c.dataset.q, +c.dataset.c); return; }
   const s = e.target.closest('[data-show]'); if (s){ reveal(+s.dataset.show, null); }
 });
