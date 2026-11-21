@@ -6,7 +6,7 @@ Illustrated practice quizzes for students in BC, organised by subject. It covers
 |---|---|---|
 | Social Studies | [`social-studies/`](social-studies/) | Regions of Canada, two versions: **Full quiz** (21 questions) and **Landforms only** (19 questions, at `social-studies/#landforms`) |
 | Math | — | Coming soon |
-| Science | [`science/`](science/) | Topics menu. **Matter** (`science/matter/`): 2 lessons so far, each with an answer, pictures, a "Remember this!" box and a test question |
+| Science | [`science/`](science/) | Topics menu. **Matter** (`science/matter/`): 30 lessons shown one at a time (arrows, trackpad swipe, ← → keys, `#q5` links), each with an answer, pictures, a "Remember this!" box and a test question |
 | Language Arts | — | Coming soon |
 
 ## Run it
@@ -32,7 +32,9 @@ social-studies/
   mapdata.js            Pre-projected Canada map geometry
 science/
   index.html            Science topics menu (add a card per topic)
-  matter/index.html     Matter lessons; add questions to the LESSONS array
+  matter/index.html     Matter page: one-question-at-a-time carousel
+  matter/lessons.js     Matter questions (the LESSONS array)
+  matter/art.js         Watercolour-style SVG drawings for the lessons
   matter/images/        Lesson illustrations
 assets/lesson.css       Shared styles for learn-then-test lesson pages
 tools/build-map.mjs     Script that generated mapdata.js

@@ -18,131 +18,53 @@
   </ul>
 </nav>
 
-<!-- shared watercolour-style filters for the drawings -->
+<!-- shared watercolour-style filter for the drawings -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
     <filter id="wc" x="-10%" y="-10%" width="120%" height="120%">
       <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="4" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <filter id="soft"><feGaussianBlur stdDeviation="1.2"/></filter>
   </defs>
 </svg>
 
 <div class="wrap">
   <div class="kicker"><a href="../../">Home</a> › Grade 4 › <a href="../">Science</a> › Matter</div>
   <h1>Matter</h1>
-  <p class="lead">Learn what matter is and the three states it comes in. Read each answer, look at the pictures, then test yourself.</p>
+  <p class="lead">Learn what matter is, how its particles move, and how it changes state. Read each answer, look at the pictures, then test yourself.</p>
 
   <div class="toolbar" role="region" aria-label="Lesson controls">
-    <div class="score" id="score" aria-live="polite"></div>
-    <button class="btn" id="reset">Start over</button>
+    <div class="deck-top">
+      <span class="counter" id="counter" aria-live="polite"></span>
+      <span class="score" id="score"></span>
+      <button class="btn" id="reset">Start over</button>
+    </div>
+    <ul class="dots" id="dots" aria-label="Jump to a question"></ul>
+  </div>
+  <p class="swipe-hint">Swipe left or right with two fingers on the trackpad, use the ← → arrow keys, or tap the arrows to move between questions.</p>
+
+  <div class="deck-wrap">
+    <button class="side-nav prev" id="prev" aria-label="Previous question">‹</button>
+    <div class="deck" id="deck" role="region" aria-roledescription="carousel" aria-label="Matter questions"></div>
+    <button class="side-nav next" id="next" aria-label="Next question">›</button>
   </div>
 
-  <main id="lessons"></main>
-
-  <footer>Follows BC's Grade 4 Science curriculum. More Matter questions are coming soon.</footer>
+  <footer>Follows BC's Grade 4 Science curriculum: matter has mass, takes up space and can change phase.</footer>
 </div>
 
+<script src="art.js"></script>
+<script src="lessons.js"></script>
 <script>
-/* ---------- drawings (original SVG, watercolour-style) ---------- */
-const ART = {
-  weight: `<svg viewBox="0 0 100 100" role="img" aria-label="A heavy kilogram weight"><g filter="url(#wc)">
-    <ellipse cx="50" cy="90" rx="34" ry="5" fill="#000" opacity=".12"/>
-    <circle cx="50" cy="22" r="10" fill="none" stroke="#3b3f45" stroke-width="6"/>
-    <path d="M30,34 H70 L84,86 Q85,90 80,90 H20 Q15,90 16,86Z" fill="#5a5f66"/>
-    <path d="M34,38 H48 L40,84 H24Z" fill="#7b8189" opacity=".7"/></g>
-    <text x="50" y="72" text-anchor="middle" font-size="22" font-weight="700" fill="#fff" font-family="var(--head-font)">kg</text></svg>`,
-  cube: `<svg viewBox="0 0 100 100" role="img" aria-label="A blue cube taking up space"><g filter="url(#wc)">
-    <ellipse cx="50" cy="90" rx="34" ry="5" fill="#000" opacity=".1"/>
-    <path d="M22,34 L52,22 L82,34 L52,46Z" fill="#7cb8ec"/>
-    <path d="M22,34 L52,46 V86 L22,74Z" fill="#3d86cf"/>
-    <path d="M52,46 L82,34 V74 L52,86Z" fill="#2a69ad"/></g></svg>`,
-  sun: `<svg viewBox="0 0 200 160" role="img" aria-label="The sun shining"><g filter="url(#wc)">
-    ${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6,x1=100+Math.cos(a)*42,y1=80+Math.sin(a)*42,x2=100+Math.cos(a)*62,y2=80+Math.sin(a)*62;return `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}" stroke="#f4b43a" stroke-width="7" stroke-linecap="round"/>`}).join('')}
-    <circle cx="100" cy="80" r="34" fill="#f9c74f"/><circle cx="92" cy="72" r="18" fill="#fbd977" opacity=".8"/></g></svg>`,
-  ice: `<svg viewBox="0 0 200 160" role="img" aria-label="An ice cube"><g filter="url(#wc)">
-    <ellipse cx="100" cy="140" rx="60" ry="8" fill="#9cc9e8" opacity=".35"/>
-    <path d="M52,58 L100,38 L150,58 L102,80Z" fill="#dff1fb" stroke="#8cc0e0" stroke-width="2"/>
-    <path d="M52,58 L102,80 L102,138 L54,116Z" fill="#b6dcf2" stroke="#8cc0e0" stroke-width="2"/>
-    <path d="M102,80 L150,58 L148,116 L102,138Z" fill="#94c8ea" stroke="#8cc0e0" stroke-width="2"/>
-    <path d="M64,70 L74,74 L74,100 L64,96Z" fill="#fff" opacity=".8"/><path d="M112,86 l20,-9" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/></g></svg>`,
-  glass: `<svg viewBox="0 0 200 160" role="img" aria-label="A glass of water"><g filter="url(#wc)">
-    <ellipse cx="100" cy="146" rx="48" ry="6" fill="#7fb6e6" opacity=".35"/>
-    <path d="M58,14 H142 L132,142 Q131,148 124,148 H76 Q69,148 68,142Z" fill="#eef6fb" stroke="#8a96a3" stroke-width="3"/>
-    <path d="M63,62 H137 L132,142 Q131,146 124,146 H76 Q69,146 68,142Z" fill="#3e95d6"/>
-    <ellipse cx="100" cy="62" rx="37" ry="5" fill="#7cc0ec"/>
-    <path d="M74,24 L80,136" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".7"/></g></svg>`,
-  steam: `<svg viewBox="0 0 200 160" role="img" aria-label="Gas spreading out as wisps of steam"><g filter="url(#wc)" fill="none" stroke-linecap="round">
-    <path d="M60,150 C40,120 80,110 60,80 S70,40 54,18" stroke="#b9b2d6" stroke-width="10" opacity=".7"/>
-    <path d="M100,150 C80,118 124,104 100,74 S112,36 96,10" stroke="#a9c6e6" stroke-width="12" opacity=".7"/>
-    <path d="M140,150 C122,124 160,112 142,84 S150,46 138,24" stroke="#c7c1e0" stroke-width="9" opacity=".7"/>
-    <g fill="#9fb3d9" stroke="none" opacity=".6"><circle cx="40" cy="40" r="4"/><circle cx="162" cy="30" r="5"/><circle cx="124" cy="58" r="3"/><circle cx="76" cy="54" r="3"/><circle cx="170" cy="96" r="3"/><circle cx="28" cy="96" r="4"/></g></g></svg>`,
-  pot: `<svg viewBox="0 0 200 170" role="img" aria-label="A pot of boiling water on a stove with steam rising"><g filter="url(#wc)">
-    <path d="M70,76 C58,56 82,48 72,28 M100,72 C86,50 112,42 100,18 M130,76 C118,56 142,48 132,28" stroke="#b7c4dd" stroke-width="8" fill="none" stroke-linecap="round" opacity=".75"/>
-    <rect x="40" y="88" width="120" height="58" rx="10" fill="#c34a3a"/>
-    <path d="M44,96 H156" stroke="#9c3527" stroke-width="3"/>
-    <rect x="28" y="82" width="144" height="12" rx="6" fill="#d95b49"/>
-    <path d="M28,88 H14 M172,88 H186" stroke="#3b3f45" stroke-width="7" stroke-linecap="round"/>
-    <ellipse cx="100" cy="86" rx="60" ry="5" fill="#5aa6d6"/>
-    <circle cx="80" cy="85" r="3" fill="#e6f3fb"/><circle cx="112" cy="84" r="4" fill="#e6f3fb"/><circle cx="96" cy="86" r="2" fill="#e6f3fb"/>
-    <rect x="30" y="148" width="140" height="10" rx="4" fill="#4b5058"/>
-    <path d="M70,164 q8,-10 16,0 q8,-10 16,0 q8,-10 16,0" stroke="#f08a3c" stroke-width="5" fill="none" stroke-linecap="round"/></g></svg>`,
-};
+const L = 'ABCD', N = LESSONS.length;
+const deck = document.getElementById('deck');
+const state = {};            // lesson index -> {tries, done, firstTry}
+let cur = 0;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- lesson content ---------- */
-const LESSONS = [
-  {
-    tag:'Foundational concept · Grade 4 Science',
-    q:'What is matter?',
-    answer:`<p class="big">Matter is anything that has <mark>mass</mark> and <mark>takes up space</mark>.</p>
-            <p>Almost everything around us is made of matter. This includes things we can see and touch, and even things we cannot see, such as air.</p>`,
-    examples:`<section class="examples" aria-label="Examples of matter"><h3>Examples of matter</h3>
-      <img class="hero-img" src="images/rock-water-balloon-768.webp" srcset="images/rock-water-balloon-768.webp 768w, images/rock-water-balloon.webp 1536w" sizes="(max-width: 960px) 100vw, 920px" width="1536" height="1024"
-        alt="A rock, a glass of water and a red balloon full of air, each with arrows showing it takes up space. A small picture shows air being pumped into the balloon.">
-      <ul class="captions">
-        <li><b>A rock</b>has mass and takes up space.</li>
-        <li><b>Water</b>has mass and takes up space.</li>
-        <li><b>Air</b>has mass and takes up space, even though we cannot see it!</li>
-      </ul></section>`,
-    remember:`<section class="box remember"><h3>Remember this!</h3><div class="rgrid">
-      <div>${ART.weight}<b>Mass</b><span>means how much matter something contains.</span></div>
-      <div>${ART.cube}<b>Takes up space</b><span>means it occupies a place, or has volume.</span></div>
-      </div></section>`,
-    test:{ q:'Which of these is NOT matter?', choices:['A glass of water','The air inside a balloon','Sunlight','A wooden chair'], a:2, art:ART.sun,
-      right:'Sunlight is energy, not matter. It does not have mass or take up space.',
-      hints:{0:'Water has mass and takes up space, so it is matter. Try again!',1:'Air is matter! It fills up the balloon, so it takes up space. Try again!',3:'A chair is made of wood, which has mass and takes up space. Try again!'} }
-  },
-  {
-    tag:'Foundational concept · Grade 4 Science',
-    q:'What are the three common states of matter?',
-    answer:`<p class="big">The three common states of matter are <mark>solid</mark>, <mark>liquid</mark> and <mark>gas</mark>.</p>
-      <ol class="states-list">
-        <li><b>Solid:</b> has its own shape and takes up a fixed amount of space. Examples: ice, a rock or a pencil.</li>
-        <li><b>Liquid:</b> takes up a fixed amount of space, but takes the shape of its container. Examples: water, milk or juice.</li>
-        <li><b>Gas:</b> spreads out to fill the space available. Examples: air, water vapour or helium.</li>
-      </ol>`,
-    examples:`<section class="compare" aria-label="Remember the difference"><h3>Remember the difference</h3>
-      <ul class="cards3">
-        <li class="solid">${ART.ice}<b>SOLID</b><p>Keeps its own shape. Example: an ice cube.</p></li>
-        <li class="liquid">${ART.glass}<b>LIQUID</b><p>Flows and takes the shape of its container. Example: water.</p></li>
-        <li class="gas">${ART.steam}<b>GAS</b><p>Spreads out to fill the space available. Example: air.</p></li>
-      </ul></section>`,
-    remember:`<section class="box remember"><h3>Vocabulary to remember</h3>
-      <ul class="vocab"><li>Solid</li><li>Liquid</li><li>Gas</li><li>Volume</li><li>State of matter</li></ul></section>`,
-    test:{ q:'When water boils, steam rises from the pot. What state of matter is the water vapour?', choices:['Solid','Liquid','Gas'], a:2, art:ART.pot,
-      right:'Water vapour is a gas. When water boils, it changes from a liquid into a gas that spreads out into the air.',
-      hints:{0:'A solid keeps its own shape, like ice. Steam doesn\'t keep a shape. Try again!',1:'The water in the pot is a liquid, but the steam rising out of it has changed. Try again!'} }
-  },
-];
-
-/* ---------- render ---------- */
-const L = 'ABCD';
-const state = {}; // index -> {tries, done, firstTry}
-function render(){
-  document.getElementById('lessons').innerHTML = LESSONS.map((x,i)=>`
-    <article class="lesson" id="l${i}" aria-labelledby="h${i}">
-      <div class="lhead"><span class="qbadge">Question ${i+1} of ${LESSONS.length}</span><span class="ltag">${x.tag}</span></div>
+function slideHTML(x, i) {
+  return `<div class="slide" id="s${i}" role="group" aria-roledescription="slide" aria-label="Question ${i + 1} of ${N}">
+    <article class="lesson" aria-labelledby="h${i}">
+      <div class="lhead"><span class="qbadge">Question ${i + 1} of ${N}</span><span class="ltag">${x.tag} · Grade 4 Science</span></div>
       <h2 id="h${i}">${x.q}</h2>
       <section class="box answer-box"><h3>Answer:</h3>${x.answer}</section>
       ${x.examples}
@@ -151,40 +73,107 @@ function render(){
         <span class="ttab">Test your knowledge!</span>
         <div class="tgrid">
           <div><p class="tq" id="t${i}">${x.test.q}</p>
-            <ul class="choices" role="list">${x.test.choices.map((c,j)=>`<li><button class="choice" data-l="${i}" data-c="${j}"><span class="l" aria-hidden="true">${L[j]}</span><span>${c}</span></button></li>`).join('')}</ul></div>
+            <ul class="choices" role="list">${x.test.choices.map((c, j) => `<li><button class="choice" data-l="${i}" data-c="${j}"><span class="l" aria-hidden="true">${L[j]}</span><span>${c}</span></button></li>`).join('')}</ul></div>
           <div class="tside">${x.test.art}<div class="feedback" id="f${i}" aria-live="polite"><p class="hint">Tap an answer to check it.</p></div></div>
         </div>
       </section>
-    </article>`).join('');
+      <div class="slide-nav">
+        <button class="btn" data-go="${i - 1}" ${i === 0 ? 'disabled' : ''}>← Previous</button>
+        <button class="btn go" data-go="${i + 1}" ${i === N - 1 ? 'disabled' : ''}>Next question →</button>
+      </div>
+    </article></div>`;
+}
+
+function render() {
+  deck.innerHTML = LESSONS.map(slideHTML).join('');
+  document.getElementById('dots').innerHTML = LESSONS.map((x, i) => `<li><button class="dot" data-go="${i}" aria-label="Question ${i + 1}: ${x.q.replace(/"/g, '&quot;')}"></button></li>`).join('');
+  ro.disconnect(); deck.querySelectorAll('.slide').forEach(s => ro.observe(s));
   score();
 }
-function pick(i,j){
-  const x = LESSONS[i].test, s = state[i] || (state[i] = {tries:0, done:false});
+
+function setCur(i, { updateHash = true } = {}) {
+  cur = i;
+  document.getElementById('counter').textContent = `Question ${i + 1} of ${N}`;
+  document.getElementById('prev').disabled = i === 0;
+  document.getElementById('next').disabled = i === N - 1;
+  deck.querySelectorAll('.slide').forEach((s, k) => { s.inert = k !== i; });
+  document.querySelectorAll('.dot').forEach((d, k) => { if (k === i) d.setAttribute('aria-current', 'step'); else d.removeAttribute('aria-current'); });
+  fitHeight();
+  if (updateHash) try { history.replaceState(null, '', '#q' + (i + 1)); } catch (e) {}
+}
+function fitHeight() { const s = deck.children[cur]; if (s) deck.style.height = s.offsetHeight + 'px'; }
+const ro = new ResizeObserver(() => fitHeight());
+
+function go(i, smooth = true) {
+  i = Math.max(0, Math.min(N - 1, i));
+  // show the target slide's height before scrolling so nothing gets clipped
+  setCur(i);
+  deck.scrollTo({ left: i * deck.clientWidth, behavior: smooth && !reduced ? 'smooth' : 'auto' });
+  const top = document.querySelector('.toolbar').getBoundingClientRect().top;
+  if (top < 0 || deck.getBoundingClientRect().top < 0) document.querySelector('.toolbar').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+}
+
+// keep the current slide in sync when the user swipes with the trackpad or touch
+let scrollTimer;
+deck.addEventListener('scroll', () => {
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(() => { const i = Math.round(deck.scrollLeft / deck.clientWidth); if (i !== cur) setCur(i); }, 90);
+}, { passive: true });
+// inert slides can't be scrolled into view by the browser, so un-inert neighbours during a swipe
+// trackpad: one two-finger swipe = one question. Ignore the swipe's coasting until it goes quiet.
+let swipeAcc = 0, swipeLocked = false, quietTimer;
+deck.addEventListener('wheel', e => {
+  if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;   // vertical scrolling still scrolls the page
+  e.preventDefault();
+  clearTimeout(quietTimer);
+  quietTimer = setTimeout(() => { swipeLocked = false; swipeAcc = 0; }, 220);
+  if (swipeLocked) return;
+  swipeAcc += e.deltaX;
+  if (Math.abs(swipeAcc) > 40) { const dir = swipeAcc > 0 ? 1 : -1; swipeLocked = true; swipeAcc = 0; if (cur + dir >= 0 && cur + dir < N) go(cur + dir); }
+}, { passive: false });
+deck.addEventListener('touchstart', () => deck.querySelectorAll('.slide').forEach(s => s.inert = false), { passive: true });
+
+function pick(i, j) {
+  const x = LESSONS[i].test, s = state[i] || (state[i] = { tries: 0, done: false });
   if (s.done) return;
   s.tries++;
-  const btn = document.querySelector(`.choice[data-l="${i}"][data-c="${j}"]`);
-  const fb = document.getElementById('f'+i);
-  if (j === x.a){
+  const btn = deck.querySelector(`.choice[data-l="${i}"][data-c="${j}"]`), fb = document.getElementById('f' + i);
+  if (j === x.a) {
     s.done = true; s.firstTry = s.tries === 1;
     btn.classList.add('right');
-    document.querySelectorAll(`.choice[data-l="${i}"]`).forEach(b=>b.disabled=true);
-    fb.innerHTML = `<div class="v ok"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="#2e7d4f"/><path d="M8,15 l5,5 l9,-10" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Correct!</div><p>${x.right}</p>`;
+    deck.querySelectorAll(`.choice[data-l="${i}"]`).forEach(b => b.disabled = true);
+    fb.innerHTML = `<div class="v ok"><svg viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="#2e7d4f"/><path d="M8,15 l5,5 l9,-10" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Correct!</div><p>${x.right}</p>`;
   } else {
     btn.classList.add('wrong'); btn.disabled = true;
     fb.innerHTML = `<div class="v no">Not quite.</div><p>${x.hints[j] || 'Try again!'}</p>`;
   }
   score();
 }
-function score(){
-  const done = Object.values(state).filter(s=>s.done).length;
-  const first = Object.values(state).filter(s=>s.done && s.firstTry).length;
-  document.getElementById('score').innerHTML = `${done} of ${LESSONS.length} done · <span>${first} right on the first try</span>`;
+function score() {
+  const vals = Object.values(state), done = vals.filter(s => s.done).length, first = vals.filter(s => s.done && s.firstTry).length;
+  document.getElementById('score').innerHTML = `${done} of ${N} done · <span>${first} right on the first try</span>`;
+  document.querySelectorAll('.dot').forEach((d, k) => { const s = state[k]; d.classList.toggle('done', !!(s && s.done && !s.firstTry)); d.classList.toggle('first', !!(s && s.done && s.firstTry)); });
 }
-document.addEventListener('click', e=>{
-  const c = e.target.closest('.choice'); if (c && !c.disabled) pick(+c.dataset.l, +c.dataset.c);
+
+document.addEventListener('click', e => {
+  const c = e.target.closest('.choice'); if (c && !c.disabled) { pick(+c.dataset.l, +c.dataset.c); return; }
+  const g = e.target.closest('[data-go]'); if (g && !g.disabled) { go(+g.dataset.go); return; }
 });
-document.getElementById('reset').onclick = ()=>{ for (const k in state) delete state[k]; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+document.getElementById('prev').onclick = () => go(cur - 1);
+document.getElementById('next').onclick = () => go(cur + 1);
+document.addEventListener('keydown', e => {
+  if (e.altKey || e.metaKey || e.ctrlKey || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+});
+window.addEventListener('resize', () => { deck.scrollTo({ left: cur * deck.clientWidth }); fitHeight(); });
+window.addEventListener('hashchange', () => { const m = location.hash.match(/^#q(\d+)$/); if (m && +m[1] - 1 !== cur) go(+m[1] - 1); });
+document.getElementById('reset').onclick = () => { for (const k in state) delete state[k]; render(); go(0, false); };
+
 render();
+const m = location.hash.match(/^#q(\d+)$/);
+const start = m ? Math.max(0, Math.min(N - 1, +m[1] - 1)) : 0;
+requestAnimationFrame(() => { deck.scrollTo({ left: start * deck.clientWidth }); setCur(start, { updateHash: !!m }); });
 </script>
 </body>
 </html>
