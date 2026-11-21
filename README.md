@@ -1,6 +1,6 @@
-# Grade 4 Learning Hub
+# Learning Hub
 
-Illustrated practice quizzes for a Grade 4 student in BC, organised by subject.
+Illustrated practice quizzes for students in BC, organised by subject. It covers **Grade 4** for now, with room to add other grades later.
 
 | Subject | Page | Status |
 |---|---|---|
