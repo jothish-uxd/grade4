@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Science · Grade 4 · Learning Hub</title>
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fdfaf3;color:#1f2a37;font-family:var(--body-font);font-size:18px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding:28px 20px 60px}
+.kicker{font-family:var(--head-font);font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#3f7d3a}
+.kicker a{color:inherit;text-decoration:none}.kicker a:hover{text-decoration:underline}
+h1{font-family:var(--head-font);font-size:clamp(36px,6vw,56px);line-height:1.05;margin:6px 0 8px}
+.lead{font-size:20px;color:#5b6675;margin:0 0 28px;max-width:52ch}
+.topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;list-style:none;margin:0;padding:0}
+.topic{display:flex;flex-direction:column;gap:8px;height:100%;border-radius:22px;padding:22px;text-decoration:none;color:#1f2a37;border:3px solid transparent;background:#dcf3df;transition:transform .15s}
+a.topic:hover{transform:translateY(-3px);border-color:#1f2a37}
+a.topic:focus-visible{outline:4px solid #1d4ed8;outline-offset:3px}
+.topic h2{font-family:var(--head-font);font-size:28px;margin:0}
+.topic p{margin:0;font-size:16px}
+.topic .meta{font-family:var(--head-font);font-weight:600;font-size:14px;color:#3f7d3a;text-transform:uppercase;letter-spacing:.06em}
+.topic .go{margin-top:auto;font-family:var(--head-font);font-weight:600}
+.topic svg{width:120px;height:72px}
+.topic.off{background:#f1efe9;border:3px dashed #d8d2c4;color:#5b6675}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Subjects">
+  <a class="brand" href="../">Learning Hub<small>Grade 4</small></a>
+  <ul>
+    <li><a href="../social-studies/">Social Studies</a></li>
+    <li><span class="soon" aria-disabled="true">Math <small>soon</small></span></li>
+    <li><a href="./" aria-current="page">Science</a></li>
+    <li><span class="soon" aria-disabled="true">Language Arts <small>soon</small></span></li>
+  </ul>
+</nav>
+<div class="wrap">
+  <div class="kicker"><a href="../">Home</a> › Grade 4 › Science</div>
+  <h1>Science</h1>
+  <p class="lead">Pick a topic. Each one has short lessons with pictures, and a question to test yourself after each lesson.</p>
+  <ul class="topics">
+    <li><a class="topic" href="matter/">
+      <svg viewBox="0 0 120 72" aria-hidden="true"><path d="M8,44 L22,38 L38,44 L24,52Z" fill="#dff1fb" stroke="#8cc0e0"/><path d="M8,44 L24,52 V68 L8,60Z" fill="#b6dcf2" stroke="#8cc0e0"/><path d="M24,52 L38,44 V60 L24,68Z" fill="#94c8ea" stroke="#8cc0e0"/><path d="M48,26 H76 L72,68 H52Z" fill="#eef6fb" stroke="#8a96a3" stroke-width="2"/><path d="M50,42 H74 L72,68 H52Z" fill="#3e95d6"/><path d="M92,68 C84,54 104,48 96,34 S100,14 94,4 M108,68 C100,56 118,48 110,34" stroke="#b9b2d6" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
+      <span class="meta">Topic 1</span>
+      <h2>Matter</h2>
+      <p>What matter is, and the three states: solid, liquid and gas.</p>
+      <span class="go">Start learning →</span></a></li>
+    <li><div class="topic off">
+      <span class="meta">More topics</span>
+      <h2>Coming soon</h2>
+      <p>More Grade 4 Science topics will be added here.</p></div></li>
+  </ul>
+</div>
+</body>
+</html>

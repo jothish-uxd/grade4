@@ -6,7 +6,7 @@ Illustrated practice quizzes for students in BC, organised by subject. It covers
 |---|---|---|
 | Social Studies | [`social-studies/`](social-studies/) | Regions of Canada, two versions: **Full quiz** (21 questions) and **Landforms only** (19 questions, at `social-studies/#landforms`) |
 | Math | — | Coming soon |
-| Science | — | Coming soon |
+| Science | [`science/`](science/) | Topics menu. **Matter** (`science/matter/`): 2 lessons so far, each with an answer, pictures, a "Remember this!" box and a test question |
 | Language Arts | — | Coming soon |
 
 ## Run it
@@ -30,6 +30,11 @@ social-studies/
   index.html            Regions of Canada quiz with a version picker: Full quiz (Q_FULL) or
                         Landforms only (LQ). Tap answers; worksheet view for printing
   mapdata.js            Pre-projected Canada map geometry
+science/
+  index.html            Science topics menu (add a card per topic)
+  matter/index.html     Matter lessons; add questions to the LESSONS array
+  matter/images/        Lesson illustrations
+assets/lesson.css       Shared styles for learn-then-test lesson pages
 tools/build-map.mjs     Script that generated mapdata.js
 ```
 
